@@ -11,7 +11,11 @@ PHP >= 8.1
 
 ## Getting Started
 
-
+#### Installation:
+via Composer:
+```
+composer require alirezasalehizadeh/quick-migration:dev-main
+```
 #### Migration class template:
 Create a `xMigration` class like this that must extends from `\Alirezasalehizadeh\QuickMigration\Migration` class:
 ``` php
