@@ -28,6 +28,8 @@ class xMigration extends Migration
 
     protected $database = "database name";
 
+    protected $translator = "set database translator name from available translators array (default MySql)";
+
     public function set(): array
     {
 
@@ -73,21 +75,21 @@ php index.php
 ```php
 $structure->id();
 $structure->string(string $name, int $length);
-$structure->number(string $name, Type $type, $length);
-$structure->text(string $name, int $length);
+$structure->number(string $name, Type $type);
+$structure->text(string $name);
 $structure->timestamp(string $name);
 $structure->json(string $name)
 ```
 #### Column attributes:
 ```php
-$structure->number('test', Type::Int, null)
+$structure->number('test', Type::Int)
 ->index(Index::Primary)     // Set this as primary key
 ->nullable(true)            // Set this nullable or not
-->index(Index::Unique)      // Set this unique
+->unique()                  // Set this unique
 ->default(1)                // Set default value
 ->autoIncrement(true);      // Set this auto increment
 ```
-*Note: see the `UsersTableMigration` class in the `test` directory for the more details.
+
 
 ## Contributing
 Send pull request or open issue for contributing.
