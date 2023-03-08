@@ -12,9 +12,10 @@ class MySqlTranslator extends Translator
 
     protected $pattern = "`%s` %s %s %s %s %s %s";
 
-    public function __construct(Column $column)
+    public function setColumn(Column $column)
     {
         $this->column = $column;
+        return $this;
     }
 
     public function make(): string
@@ -30,13 +31,13 @@ class MySqlTranslator extends Translator
         );
     }
 
-    protected function matchName()
+    public function matchName()
     {
         return $this->column->getName();
 
     }
 
-    protected function matchType()
+    public function matchType()
     {
 
         $type = $this->column->getType();
@@ -49,28 +50,28 @@ class MySqlTranslator extends Translator
 
     }
 
-    protected function matchNullable()
+    public function matchNullable()
     {
         return $this->column->getNullable() ? "NULL" : "NOT NULL";
     }
 
-    protected function matchAutoIncrement()
+    public function matchAutoIncrement()
     {
         return $this->column->getAutoIncrement() ? "AUTO_INCREMENT" : '';
     }
 
-    protected function matchDefault()
+    public function matchDefault()
     {
         return $this->column->getDefault() ? ("DEFAULT " . $this->column->getDefault()) : '';
 
     }
 
-    protected function matchAttribute()
+    public function matchAttribute()
     {
         return $this->column->getAttribute();
     }
 
-    protected function matchIndex()
+    public function matchIndex()
     {
         $index = '';
         if ($this->column->getIndex() === Index::Primary->value) {

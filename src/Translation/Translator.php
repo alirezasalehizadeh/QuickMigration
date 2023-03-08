@@ -1,24 +1,38 @@
 <?php
 namespace Alirezasalehizadeh\QuickMigration\Translation;
 
-abstract class Translator
+use Alirezasalehizadeh\QuickMigration\Structure\Column;
+
+class Translator implements TranslatorInterface
 {
-    protected $availableTranslators = "MySql";
-    
     protected $pattern;
+    
+    public $availableTranslators = [
+        "MySql" => MySqlTranslator::class,
+    ];
 
-    protected function make(){}
+    public function setColumn(Column $column)
+    {}
 
-    protected function matchName(){}
+    public function make()
+    {}
 
-    protected function matchType(){}
+    public function matchName()
+    {}
 
-    protected function matchNullable(){}
+    public function matchType()
+    {}
 
-    protected function matchAutoIncrement(){}
+    public function matchNullable()
+    {}
 
-    protected function matchDefault(){}
+    public function matchAutoIncrement()
+    {}
 
-    protected function matchAttribute(){}
+    public function matchDefault()
+    {}
+
+    public function matchAttribute()
+    {}
 
 }

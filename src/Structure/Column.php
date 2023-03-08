@@ -55,6 +55,11 @@ class Column
         return $this;
     }
 
+    public function unique()
+    {
+        return $this->index(Index::Unique);
+    }
+
     public function getName()
     {
         return $this->name;
