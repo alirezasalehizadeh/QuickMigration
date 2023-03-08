@@ -55,6 +55,11 @@ class Column
         return $this;
     }
 
+    public function primary()
+    {
+        return $this->index(Index::Primary);
+    }
+
     public function unique()
     {
         return $this->index(Index::Unique);
