@@ -1,9 +1,10 @@
 <?php
-namespace Alirezasalehizadeh\QuickMigration\Translation;
+namespace Alirezasalehizadeh\QuickMigration\Translation\Translators;
 
-use Alirezasalehizadeh\QuickMigration\Enums\Index;
 use Alirezasalehizadeh\QuickMigration\Enums\Type;
+use Alirezasalehizadeh\QuickMigration\Enums\Index;
 use Alirezasalehizadeh\QuickMigration\Structure\Column;
+use Alirezasalehizadeh\QuickMigration\Translation\Translator;
 
 class MySqlTranslator extends Translator
 {

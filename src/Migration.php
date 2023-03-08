@@ -1,10 +1,11 @@
 <?php
 namespace Alirezasalehizadeh\QuickMigration;
 
-use Alirezasalehizadeh\QuickMigration\CommandGenerator;
+use PDO;
 use Alirezasalehizadeh\QuickMigration\MigrationInterface;
 use Alirezasalehizadeh\QuickMigration\Translation\TranslateManager;
-use PDO;
+use Alirezasalehizadeh\QuickMigration\Command\Commands\DropTableCommand;
+use Alirezasalehizadeh\QuickMigration\Command\Commands\CreateTableCommand;
 
 abstract class Migration implements MigrationInterface
 {
@@ -26,8 +27,8 @@ abstract class Migration implements MigrationInterface
 
     public function drop(string $table)
     {
-        $sql = (new CommandGenerator)->dropTableCommand($this->database, $table);
-        $this->connection->prepare($sql)->execute();
+        $sql = (new DropTableCommand($this->database, $table))->generate();
+        $this->run($sql);
     }
 
     public function migrate()
@@ -40,9 +41,14 @@ abstract class Migration implements MigrationInterface
         $commands = (new TranslateManager($this->translator))->translate($columns);
 
         //  Generate `CREATE TABLE` sql command by `CommandGenerator` class
-        $sql = (new CommandGenerator)->createTableCommand($this->database, $attribute['table'], $commands, $attribute['engine']);
+        $sql = (new CreateTableCommand($this->database, $attribute['table'], $commands, $attribute['engine']))->generate();
 
         // Run the sql string by PDO connection
+        $this->run($sql);
+    }
+
+    private function run(string $sql)
+    {
         $this->connection->prepare($sql)->execute();
     }
 }

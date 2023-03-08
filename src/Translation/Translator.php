@@ -2,6 +2,7 @@
 namespace Alirezasalehizadeh\QuickMigration\Translation;
 
 use Alirezasalehizadeh\QuickMigration\Structure\Column;
+use Alirezasalehizadeh\QuickMigration\Translation\Translators\MySqlTranslator;
 
 class Translator implements TranslatorInterface
 {
