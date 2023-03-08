@@ -84,7 +84,7 @@ $structure->json(string $name)
 ```php
 $structure->number('test', Type::Int)
 ->index(Index::Primary)     // Set this as primary key
-->nullable(true)            // Set this nullable or not
+->nullable()               // Set this nullable or not
 ->unique()                  // Set this unique
 ->default(1)                // Set default value
 ->autoIncrement(true);      // Set this auto increment
