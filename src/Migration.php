@@ -2,6 +2,7 @@
 namespace Alirezasalehizadeh\QuickMigration;
 
 use Alirezasalehizadeh\QuickMigration\Command\Commands\CreateTableCommand;
+use Alirezasalehizadeh\QuickMigration\Command\Commands\DropIfExistsTableCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\DropTableCommand;
 use Alirezasalehizadeh\QuickMigration\MigrationInterface;
 use Alirezasalehizadeh\QuickMigration\Translation\TranslateManager;
@@ -28,6 +29,12 @@ abstract class Migration implements MigrationInterface
     public function drop(string $table)
     {
         $sql = (new DropTableCommand($this->database, $table))->generate();
+        $this->run($sql);
+    }
+
+    public function dropIfExists(string $table)
+    {
+        $sql = (new DropIfExistsTableCommand($this->database, $table))->generate();
         $this->run($sql);
     }
 
