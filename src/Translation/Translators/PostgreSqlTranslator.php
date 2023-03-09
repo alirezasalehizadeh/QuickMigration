@@ -6,7 +6,7 @@ use Alirezasalehizadeh\QuickMigration\Enums\Type;
 use Alirezasalehizadeh\QuickMigration\Structure\Column;
 use Alirezasalehizadeh\QuickMigration\Translation\Translator;
 
-class MySqlTranslator extends Translator
+class PostgreSqlTranslator extends Translator
 {
 
     protected $column;

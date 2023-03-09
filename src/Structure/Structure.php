@@ -12,8 +12,6 @@ class Structure
 
     private $table;
 
-    private $engine = "INNODB";
-
     public function __construct(string $table)
     {
         $this->table = $table;
@@ -54,10 +52,7 @@ class Structure
 
     public function done()
     {
-        return [$this->columns, [
-            'table' => $this->table,
-            'engine' => $this->engine,
-        ]];
+        return [$this->columns, ['table' => $this->table]];
     }
 
 }
