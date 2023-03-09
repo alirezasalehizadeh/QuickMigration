@@ -130,7 +130,7 @@ class StructureBuilderTest extends TestCase
 
         $sql = (new TranslateManager)->translate($columns[0]);
 
-        $this->assertSame("`foo` INT NULL `bar` VARCHAR(100) NOT NULL UNIQUE", "{$sql[0]} {$sql[1]}");
+        $this->assertSame("`foo` INT NULL , `bar` VARCHAR(100) NOT NULL UNIQUE", "{$sql[0]} , {$sql[1]}");
     }
 
 }
