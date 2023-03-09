@@ -65,6 +65,8 @@ php index.php
 $connection = PDO connection object;
 
 (new xMigration($connection))->drop('table name');
+// OR
+(new xMigration($connection))->dropIfExists('table name');
 ```
 ```
 php index.php
