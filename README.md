@@ -7,6 +7,7 @@ Run your migration quickly with Quick Migration!
 PHP >= 8.1
 #### Available database:
 * MySql
+* PostgreSql
 
 
 ## Getting Started
