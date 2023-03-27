@@ -1,8 +1,8 @@
 <?php
 
-namespace Alirezasalehizadeh\QuickMigration\Translation;
+namespace Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator;
 
-class TranslateManager
+class ColumnTranslateManager
 {
 
     private $translator;
@@ -11,7 +11,7 @@ class TranslateManager
 
     public function __construct($translator = null)
     {
-        $translatorObj = new Translator;
+        $translatorObj = new ColumnTranslator;
 
         $this->translator = in_array($translator, $translatorObj->availableTranslators)
         ? new $translatorObj->availableTranslators[$translator]

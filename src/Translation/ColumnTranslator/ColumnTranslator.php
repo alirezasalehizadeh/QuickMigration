@@ -1,11 +1,11 @@
 <?php
-namespace Alirezasalehizadeh\QuickMigration\Translation;
+namespace Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator;
 
 use Alirezasalehizadeh\QuickMigration\Structure\Column;
-use Alirezasalehizadeh\QuickMigration\Translation\Translators\MySqlTranslator;
-use Alirezasalehizadeh\QuickMigration\Translation\Translators\PostgreSqlTranslator;
+use Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\Translators\MySqlTranslator;
+use Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\Translators\PostgreSqlTranslator;
 
-class Translator implements TranslatorInterface
+class ColumnTranslator implements ColumnTranslatorInterface
 {
     protected $pattern;
 

@@ -4,7 +4,11 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Alirezasalehizadeh\\QuickMigration\\": "src/",
+            "Alirezasalehizadeh\\QuickMigration\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Alirezasalehizadeh\\QuickMigration\\Test\\": "test/"
         }
     },

@@ -1,9 +1,9 @@
 <?php
-namespace Alirezasalehizadeh\QuickMigration\Translation;
+namespace Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator;
 
 use Alirezasalehizadeh\QuickMigration\Structure\Column;
 
-interface TranslatorInterface
+interface ColumnTranslatorInterface
 {
     public function setColumn(Column $column);
 

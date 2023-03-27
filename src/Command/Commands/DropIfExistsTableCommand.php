@@ -1,14 +1,16 @@
 <?php
 namespace Alirezasalehizadeh\QuickMigration\Command\Commands;
 
-use Alirezasalehizadeh\QuickMigration\Command\CommandGenerator;
+use Alirezasalehizadeh\QuickMigration\Command\Command;
+use Alirezasalehizadeh\QuickMigration\Command\CommandInterface;
+use Alirezasalehizadeh\QuickMigration\Enums\Command as EnumsCommand;
 
-class DropIfExistsTableCommand extends CommandGenerator
+class DropIfExistsTableCommand extends Command implements CommandInterface
 {
 
     private $database, $table;
 
-    protected $pattern = "DROP TABLE IF EXISTS `%s`.`%s`";
+    protected $pattern = "%s `%s`.`%s`";
 
     public function __construct(string $database, string $table)
     {
@@ -16,8 +18,14 @@ class DropIfExistsTableCommand extends CommandGenerator
         $this->table = $table;
     }
 
-    public function generate(): string
+    public function getCommand() : self
     {
-        return sprintf($this->pattern, $this->database, $this->table);
+        return $this
+        ->setName(EnumsCommand::DropTableIfExists)
+        ->setPattern($this->pattern)
+        ->setIncludes([
+            'database' => $this->database,
+            'table' => $this->table,
+        ]);
     }
 }

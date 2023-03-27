@@ -1,12 +1,12 @@
 <?php
-namespace Alirezasalehizadeh\QuickMigration\Translation\Translators;
+namespace Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\Translators;
 
 use Alirezasalehizadeh\QuickMigration\Enums\Index;
 use Alirezasalehizadeh\QuickMigration\Enums\Type;
 use Alirezasalehizadeh\QuickMigration\Structure\Column;
-use Alirezasalehizadeh\QuickMigration\Translation\Translator;
+use Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\ColumnTranslator;
 
-class PostgreSqlTranslator extends Translator
+class PostgreSqlTranslator extends ColumnTranslator
 {
 
     protected $column;
