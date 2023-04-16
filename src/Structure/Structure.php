@@ -1,7 +1,7 @@
 <?php
 namespace Alirezasalehizadeh\QuickMigration\Structure;
 
-use Alirezasalehizadeh\QuickMigration\Enums\Index;
+use Alirezasalehizadeh\QuickMigration\Enums\Attribute;
 use Alirezasalehizadeh\QuickMigration\Enums\Type;
 use Alirezasalehizadeh\QuickMigration\Structure\Column;
 
@@ -19,10 +19,10 @@ class Structure
 
     public function id()
     {
-        return $this->columns[] = (new Column('id', Type::Int))
-            ->nullable(false)
-            ->autoIncrement(true)
-            ->index(Index::Primary);
+        return $this->columns[] = (new Column('id', Type::Bigint))
+            ->autoIncrement()
+            ->primary()
+            ->attribute(Attribute::Unsigned);
     }
 
     public function string(string $name, int $length)

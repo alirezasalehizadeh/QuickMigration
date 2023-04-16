@@ -31,13 +31,15 @@ abstract class Migration implements MigrationInterface
 
     public function drop(string $table)
     {
-        $sql = (new DropTableCommandTranslator((new DropTableCommand($this->database, $table))->getCommand()))->make();
+        $command = (new DropTableCommand($this->database, $table))->getCommand();
+        $sql = (new DropTableCommandTranslator($command))->make();
         $this->run($sql);
     }
 
     public function dropIfExists(string $table)
     {
-        $sql = (new DropIfExistsTableCommandTranslator((new DropIfExistsTableCommand($this->database, $table))->getCommand()))->make();
+        $command = (new DropIfExistsTableCommand($this->database, $table))->getCommand();
+        $sql = (new DropIfExistsTableCommandTranslator($command))->make();
         $this->run($sql);
     }
 
@@ -48,10 +50,11 @@ abstract class Migration implements MigrationInterface
         $attribute = $data[1];
 
         //  Translate column objects to sql string
-        $commands = (new ColumnTranslateManager($this->translator))->translate($columns);
+        $columnCommands = (new ColumnTranslateManager($this->translator))->translate($columns);
         
         //  Make `CREATE TABLE` sql command by `CreateTableCommand` object
-        $sql = (new CreateTableCommandTranslator((new CreateTableCommand($this->database, $attribute['table'], $commands))->getCommand()))->make();
+        $command = (new CreateTableCommand($this->database, $attribute['table'], $columnCommands))->getCommand();
+        $sql = (new CreateTableCommandTranslator($command))->make();
 
         // Run the sql string by PDO connection
         $this->run($sql);

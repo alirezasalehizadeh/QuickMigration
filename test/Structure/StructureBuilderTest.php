@@ -27,7 +27,7 @@ class StructureBuilderTest extends TestCase
     {
         $structure = new Structure('test');
 
-        $column = $structure->number('foo', Type::Int)->autoIncrement(true);
+        $column = $structure->number('foo', Type::Int)->autoIncrement();
 
         $sql = (new ColumnTranslateManager())->translate([$column]);
 

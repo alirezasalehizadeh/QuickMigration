@@ -11,18 +11,23 @@ class ColumnTranslateManager
 
     public function __construct($translator = null)
     {
-        $translatorObj = new ColumnTranslator;
-
-        $this->translator = in_array($translator, $translatorObj->availableTranslators)
-        ? new $translatorObj->availableTranslators[$translator]
-        : new $translatorObj->availableTranslators["MySql"];
+        $this->resolveTranslator($translator);
     }
-
+    
     public function translate(array $columns): array
     {
         foreach ($columns as $column) {
             $this->translatedColumns[] = $this->translator->setColumn($column)->make();
         }
         return $this->translatedColumns;
+    }
+    
+    private function resolveTranslator($translator)
+    {
+        $columnTranslator = new ColumnTranslator;
+    
+        $this->translator = in_array($translator, $columnTranslator->availableTranslators)
+        ? new $columnTranslator->availableTranslators[$translator]
+        : new $columnTranslator->availableTranslators["MySql"];
     }
 }

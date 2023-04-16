@@ -32,7 +32,7 @@ class Column
         return $this;
     }
 
-    public function autoIncrement(bool $status = false)
+    public function autoIncrement(bool $status = true)
     {
         $this->autoIncrement = $status;
         return $this;
