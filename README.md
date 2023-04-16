@@ -15,7 +15,7 @@ PHP >= 8.1
 #### Installation:
 via Composer:
 ```
-composer require alirezasalehizadeh/quick-migration:1.3.0
+composer require alirezasalehizadeh/quick-migration
 ```
 #### Migration class template:
 Create a `xMigration` class like this that must extends from `\Alirezasalehizadeh\QuickMigration\Migration` class:
@@ -90,7 +90,7 @@ $structure->number('test', Type::Int)
 ->nullable()                // Set this nullable or not
 ->unique()                  // Set this unique
 ->default(1)                // Set default value
-->autoIncrement(true);      // Set this auto increment
+->autoIncrement();          // Set this auto increment
 ```
 
 
