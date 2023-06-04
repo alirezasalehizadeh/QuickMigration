@@ -1,4 +1,5 @@
 <?php
+
 namespace Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\Translators;
 
 use Alirezasalehizadeh\QuickMigration\Enums\Index;
@@ -21,7 +22,8 @@ class MySqlTranslator extends ColumnTranslator
 
     public function make(): string
     {
-        return trim(preg_replace('/\s+/', ' ', sprintf($this->pattern,
+        return trim(preg_replace('/\s+/', ' ', sprintf(
+            $this->pattern,
             $this->matchName(),
             $this->matchType(),
             $this->matchAttribute(),
@@ -35,7 +37,6 @@ class MySqlTranslator extends ColumnTranslator
     public function matchName()
     {
         return $this->column->getName();
-
     }
 
     public function matchType()
@@ -48,7 +49,6 @@ class MySqlTranslator extends ColumnTranslator
         }
 
         return $type;
-
     }
 
     public function matchNullable()
@@ -63,8 +63,7 @@ class MySqlTranslator extends ColumnTranslator
 
     public function matchDefault()
     {
-        return $this->column->getDefault() ? ("DEFAULT " . $this->column->getDefault()) : '';
-
+        return $this->column->getDefault() ? "DEFAULT ({$this->column->getDefault()})" : '';
     }
 
     public function matchAttribute()
@@ -74,14 +73,11 @@ class MySqlTranslator extends ColumnTranslator
 
     public function matchIndex()
     {
-        $index = '';
-        if ($this->column->getIndex() === Index::Primary->value) {
-            $index .= " PRIMARY KEY ";
-        }
-        if ($this->column->getIndex() === Index::Unique->value) {
-            $index .= " UNIQUE ";
-        }
-        return $index;
-    }
+        return match ($this->column->getIndex()) {
 
+            Index::Primary->value => " PRIMARY KEY ",
+            Index::Unique->value => " UNIQUE ",
+            default => null
+        };
+    }
 }

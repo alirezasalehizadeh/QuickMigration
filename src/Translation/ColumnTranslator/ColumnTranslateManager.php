@@ -26,7 +26,7 @@ class ColumnTranslateManager
     {
         $columnTranslator = new ColumnTranslator;
     
-        $this->translator = in_array($translator, $columnTranslator->availableTranslators)
+        $this->translator = array_key_exists($translator, $columnTranslator->availableTranslators)
         ? new $columnTranslator->availableTranslators[$translator]
         : new $columnTranslator->availableTranslators["MySql"];
     }

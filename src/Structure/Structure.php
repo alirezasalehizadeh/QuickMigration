@@ -50,6 +50,12 @@ class Structure
         return $this->columns[] = new Column($name, Type::Json);
     }
 
+    public function enum(string $name, array $enums)
+    {
+        return $this->columns[] = (new Column($name, Type::Enum))
+        ->default(fn() => implode(',', $enums));
+    }
+
     public function done()
     {
         return [$this->columns, ['table' => $this->table]];

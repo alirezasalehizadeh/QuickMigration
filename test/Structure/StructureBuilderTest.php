@@ -43,7 +43,7 @@ class StructureBuilderTest extends TestCase
 
         $sql = (new ColumnTranslateManager())->translate([$column]);
 
-        $this->assertSame("`foo` TINYINT NOT NULL DEFAULT 1", $sql[0]);
+        $this->assertSame("`foo` TINYINT NOT NULL DEFAULT (1)", $sql[0]);
     }
 
     /** @test */
@@ -95,6 +95,18 @@ class StructureBuilderTest extends TestCase
     }
 
     /** @test */
+    public function createEnumTypeColumnTest()
+    {
+        $structure = new Structure('test');
+
+        $column = $structure->enum('foo', ['BAR', 'BAZ']);
+
+        $sql = (new ColumnTranslateManager())->translate([$column]);
+
+        $this->assertSame("`foo` ENUM NOT NULL DEFAULT (BAR,BAZ)", $sql[0]);
+    }
+
+    /** @test */
     public function createPrimaryColumnTest()
     {
         $structure = new Structure('test');
@@ -115,7 +127,7 @@ class StructureBuilderTest extends TestCase
 
         $sql = (new ColumnTranslateManager())->translate([$column]);
 
-        $this->assertSame("`foo` INT NULL DEFAULT NULL", $sql[0]);
+        $this->assertSame("`foo` INT NULL DEFAULT (NULL)", $sql[0]);
     }
 
     /** @test */

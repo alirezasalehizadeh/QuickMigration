@@ -1,4 +1,5 @@
 <?php
+
 namespace Alirezasalehizadeh\QuickMigration\Structure;
 
 use Alirezasalehizadeh\QuickMigration\Enums\Index;
@@ -44,8 +45,14 @@ class Column
         return $this;
     }
 
-    public function default(mixed $default) {
-        $this->default = ($this->nullable) ? "NULL" : $default;
+    public function default(mixed $default)
+    {
+        if (is_callable($default)) {
+            $this->default = $default();
+        } else {
+            $this->default = ($this->nullable) ? "NULL" : $default;
+        }
+
         return $this;
     }
 
