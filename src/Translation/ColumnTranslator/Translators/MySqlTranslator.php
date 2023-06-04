@@ -63,7 +63,13 @@ class MySqlTranslator extends ColumnTranslator
 
     public function matchDefault()
     {
-        return $this->column->getDefault() ? "DEFAULT ({$this->column->getDefault()})" : '';
+        $default = $this->column->getDefault();
+
+        if (is_array($default)) {
+            $default = implode(',', $default);
+        }
+
+        return $this->column->getDefault() ? "DEFAULT ({$default})" : '';
     }
 
     public function matchAttribute()
