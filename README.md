@@ -15,7 +15,7 @@ PHP >= 8.1
 #### Installation:
 via Composer:
 ```
-composer require alirezasalehizadeh/quick-migration:1.3.0
+composer require alirezasalehizadeh/quick-migration
 ```
 #### Migration class template:
 Create a `xMigration` class like this that must extends from `\Alirezasalehizadeh\QuickMigration\Migration` class:
@@ -82,6 +82,7 @@ $structure->number(string $name, Type $type);
 $structure->text(string $name);
 $structure->timestamp(string $name);
 $structure->json(string $name)
+$structure->enum(string $name, array $enums)
 ```
 #### Column attributes:
 ```php
