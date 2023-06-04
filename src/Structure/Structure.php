@@ -52,8 +52,7 @@ class Structure
 
     public function enum(string $name, array $enums)
     {
-        return $this->columns[] = (new Column($name, Type::Enum))
-        ->default(fn() => implode(',', $enums));
+        return $this->columns[] = (new Column($name, Type::Enum))->default($enums);
     }
 
     public function done()
