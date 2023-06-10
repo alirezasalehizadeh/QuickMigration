@@ -89,12 +89,12 @@ class Column
 
     public function getIndex()
     {
-        return $this->index->value ?? '';
+        return $this->index?->value;
     }
 
     public function getAttribute()
     {
-        return $this->attribute->value ?? '';
+        return $this->attribute?->value;
     }
 
     public function getDefault()

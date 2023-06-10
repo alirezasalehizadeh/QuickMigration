@@ -58,7 +58,7 @@ class PostgreSqlTranslator extends ColumnTranslator
 
     public function matchAutoIncrement()
     {
-        return $this->column->getAutoIncrement() ? "AUTO_INCREMENT" : '';
+        return $this->column->getAutoIncrement() ? "AUTO_INCREMENT" : null;
     }
 
     public function matchDefault()
@@ -69,7 +69,7 @@ class PostgreSqlTranslator extends ColumnTranslator
             $default = implode(',', $default);
         }
 
-        return $this->column->getDefault() ? "DEFAULT ({$default})" : '';
+        return $this->column->getDefault() ? "DEFAULT ({$default})" : null;
     }
 
     public function matchAttribute()
