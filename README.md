@@ -91,7 +91,7 @@ $structure->number('test', Type::Int)
 ->nullable()                // Set this nullable or not
 ->unique()                  // Set this unique
 ->default(1)                // Set default value
-->autoIncrement(true);      // Set this auto increment
+->autoIncrement();          // Set this auto increment
 ```
 
 
