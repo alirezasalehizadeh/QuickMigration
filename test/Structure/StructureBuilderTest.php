@@ -103,7 +103,7 @@ class StructureBuilderTest extends TestCase
 
         $sql = (new ColumnTranslateManager())->translate([$column]);
 
-        $this->assertSame("`foo` ENUM NOT NULL DEFAULT (BAR,BAZ)", $sql[0]);
+        $this->assertSame("`foo` ENUM('BAR','BAZ') NOT NULL", $sql[0]);
     }
 
     /** @test */
@@ -127,7 +127,7 @@ class StructureBuilderTest extends TestCase
 
         $sql = (new ColumnTranslateManager())->translate([$column]);
 
-        $this->assertSame("`foo` INT NULL DEFAULT (NULL)", $sql[0]);
+        $this->assertSame("`foo` INT NULL", $sql[0]);
     }
 
     /** @test */

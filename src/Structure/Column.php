@@ -8,7 +8,7 @@ use Alirezasalehizadeh\QuickMigration\Enums\Attribute;
 
 class Column
 {
-    private $name, $type, $length;
+    private $name, $type, $value;
 
     private $index;
 
@@ -20,11 +20,11 @@ class Column
 
     private $autoIncrement;
 
-    public function __construct(string $name, Type $type, int $length = null)
+    public function __construct(string $name, Type $type, mixed $value = null)
     {
         $this->name = $name;
         $this->type = $type;
-        $this->length = $length;
+        $this->value = $value;
     }
 
     public function nullable(bool $status = true)
@@ -47,12 +47,10 @@ class Column
 
     public function default(mixed $default)
     {
-        if (is_callable($default)) {
-            $this->default = $default();
-        } else {
-            $this->default = ($this->nullable) ? "NULL" : $default;
-        }
+        if (!$this->nullable) {
 
+            $this->default = is_callable($default) ? $default() : $default;
+        }
         return $this;
     }
 
@@ -82,9 +80,9 @@ class Column
         return $this->type->value;
     }
 
-    public function getLength()
+    public function getValue()
     {
-        return $this->length;
+        return $this->value;
     }
 
     public function getIndex()

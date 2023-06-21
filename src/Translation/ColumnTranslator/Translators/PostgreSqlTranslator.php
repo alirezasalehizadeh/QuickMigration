@@ -45,7 +45,12 @@ class PostgreSqlTranslator extends ColumnTranslator
         $type = $this->column->getType();
 
         if ($type === Type::Varchar->value) {
-            $type .= "({$this->column->getLength()})";
+            $type .= "({$this->column->getValue()})";
+        }
+
+        if ($type === Type::Enum->value) {
+            $values = implode(',', $this->column->getValue());
+            $type .= "({$values})";
         }
 
         return $type;
@@ -64,10 +69,6 @@ class PostgreSqlTranslator extends ColumnTranslator
     public function matchDefault()
     {
         $default = $this->column->getDefault();
-
-        if (is_array($default)) {
-            $default = implode(',', $default);
-        }
 
         return $this->column->getDefault() ? "DEFAULT ({$default})" : null;
     }

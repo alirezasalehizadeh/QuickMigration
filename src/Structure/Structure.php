@@ -52,7 +52,7 @@ class Structure
 
     public function enum(string $name, array $enums)
     {
-        return $this->columns[] = (new Column($name, Type::Enum))->default($enums);
+        return $this->columns[] = (new Column($name, Type::Enum, $enums));
     }
 
     public function done()
