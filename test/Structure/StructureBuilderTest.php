@@ -1,4 +1,5 @@
 <?php
+
 namespace Alirezasalehizadeh\QuickMigration\Test\Structure;
 
 use Alirezasalehizadeh\QuickMigration\Enums\Attribute;
@@ -43,7 +44,7 @@ class StructureBuilderTest extends TestCase
 
         $sql = (new ColumnTranslateManager())->translate([$column]);
 
-        $this->assertSame("`foo` TINYINT NOT NULL DEFAULT (1)", $sql[0]);
+        $this->assertSame("`foo` TINYINT NOT NULL DEFAULT('1')", $sql[0]);
     }
 
     /** @test */
@@ -107,6 +108,18 @@ class StructureBuilderTest extends TestCase
     }
 
     /** @test */
+    public function createEnumTypeColumnWithDefaultValueTest()
+    {
+        $structure = new Structure('test');
+
+        $column = $structure->enum('foo', ['BAR', 'BAZ'])->default('BAR');
+
+        $sql = (new ColumnTranslateManager())->translate([$column]);
+
+        $this->assertSame("`foo` ENUM('BAR','BAZ') NOT NULL DEFAULT('BAR')", $sql[0]);
+    }
+
+    /** @test */
     public function createPrimaryColumnTest()
     {
         $structure = new Structure('test');
@@ -123,11 +136,14 @@ class StructureBuilderTest extends TestCase
     {
         $structure = new Structure('test');
 
-        $column = $structure->number('foo', Type::Int)->nullable()->default(1);
+        $structure->number('foo', Type::Int)->nullable()->default(1);
+        $structure->number('bar', Type::Int)->default(2)->nullable();
 
-        $sql = (new ColumnTranslateManager())->translate([$column]);
+        $columns = $structure->done();
 
-        $this->assertSame("`foo` INT NULL", $sql[0]);
+        $sql = (new ColumnTranslateManager())->translate($columns[0]);
+
+        $this->assertSame("`foo` INT NULL , `bar` INT NULL", "{$sql[0]} , {$sql[1]}");
     }
 
     /** @test */
@@ -144,5 +160,4 @@ class StructureBuilderTest extends TestCase
 
         $this->assertSame("`foo` INT NULL , `bar` VARCHAR(100) NOT NULL UNIQUE", "{$sql[0]} , {$sql[1]}");
     }
-
 }

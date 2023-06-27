@@ -70,7 +70,7 @@ class MySqlTranslator extends ColumnTranslator
     {
         $default = $this->column->getDefault();
 
-        return $this->column->getDefault() ? "DEFAULT ({$default})" : null;
+        return ($this->column->getDefault() && !$this->column->getNullable()) ? "DEFAULT('{$default}')" : null;
     }
 
     public function matchAttribute()

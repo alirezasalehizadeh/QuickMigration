@@ -47,10 +47,7 @@ class Column
 
     public function default(mixed $default)
     {
-        if (!$this->nullable) {
-
-            $this->default = is_callable($default) ? $default() : $default;
-        }
+        $this->default = is_callable($default) ? $default() : $default;
         return $this;
     }
 
