@@ -20,7 +20,7 @@ class Column
 
     private $autoIncrement;
 
-    public function __construct(string $name, Type $type, mixed $value = null)
+    public function __construct(string $name, Type|string $type, mixed $value = null)
     {
         $this->name = $name;
         $this->type = $type;
@@ -74,7 +74,9 @@ class Column
 
     public function getType()
     {
-        return $this->type->value;
+        return $this->type instanceof Type
+            ? $this->type->value
+            : $this->type;
     }
 
     public function getValue()

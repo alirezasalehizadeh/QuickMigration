@@ -18,9 +18,9 @@ class StructureBuilderTest extends TestCase
 
         $column = $structure->string('foo', 100)->nullable();
 
-        $sql = (new ColumnTranslateManager())->translate([$column]);
+        $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
-        $this->assertSame("`foo` VARCHAR(100) NULL", $sql[0]);
+        $this->assertSame("`foo` VARCHAR(100) NULL", $sql);
     }
 
     /** @test */
@@ -30,9 +30,9 @@ class StructureBuilderTest extends TestCase
 
         $column = $structure->number('foo', Type::Int)->autoIncrement();
 
-        $sql = (new ColumnTranslateManager())->translate([$column]);
+        $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
-        $this->assertSame("`foo` INT NOT NULL AUTO_INCREMENT", $sql[0]);
+        $this->assertSame("`foo` INT NOT NULL AUTO_INCREMENT", $sql);
     }
 
     /** @test */
@@ -42,9 +42,9 @@ class StructureBuilderTest extends TestCase
 
         $column = $structure->number('foo', Type::Tinyint)->default(1);
 
-        $sql = (new ColumnTranslateManager())->translate([$column]);
+        $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
-        $this->assertSame("`foo` TINYINT NOT NULL DEFAULT('1')", $sql[0]);
+        $this->assertSame("`foo` TINYINT NOT NULL DEFAULT('1')", $sql);
     }
 
     /** @test */
@@ -54,9 +54,9 @@ class StructureBuilderTest extends TestCase
 
         $column = $structure->number('foo', Type::Bigint)->attribute(Attribute::Unsigned);
 
-        $sql = (new ColumnTranslateManager())->translate([$column]);
+        $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
-        $this->assertSame("`foo` BIGINT UNSIGNED NOT NULL", $sql[0]);
+        $this->assertSame("`foo` BIGINT UNSIGNED NOT NULL", $sql);
     }
 
     /** @test */
@@ -66,9 +66,9 @@ class StructureBuilderTest extends TestCase
 
         $column = $structure->string('foo', 100)->unique();
 
-        $sql = (new ColumnTranslateManager())->translate([$column]);
+        $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
-        $this->assertSame("`foo` VARCHAR(100) NOT NULL UNIQUE", $sql[0]);
+        $this->assertSame("`foo` VARCHAR(100) NOT NULL UNIQUE", $sql);
     }
 
     /** @test */
@@ -78,9 +78,9 @@ class StructureBuilderTest extends TestCase
 
         $column = $structure->timestamp('foo');
 
-        $sql = (new ColumnTranslateManager())->translate([$column]);
+        $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
-        $this->assertSame("`foo` TIMESTAMP NOT NULL", $sql[0]);
+        $this->assertSame("`foo` TIMESTAMP NOT NULL", $sql);
     }
 
     /** @test */
@@ -90,9 +90,9 @@ class StructureBuilderTest extends TestCase
 
         $column = $structure->json('foo');
 
-        $sql = (new ColumnTranslateManager())->translate([$column]);
+        $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
-        $this->assertSame("`foo` JSON NOT NULL", $sql[0]);
+        $this->assertSame("`foo` JSON NOT NULL", $sql);
     }
 
     /** @test */
@@ -102,9 +102,9 @@ class StructureBuilderTest extends TestCase
 
         $column = $structure->enum('foo', ['BAR', 'BAZ']);
 
-        $sql = (new ColumnTranslateManager())->translate([$column]);
+        $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
-        $this->assertSame("`foo` ENUM('BAR','BAZ') NOT NULL", $sql[0]);
+        $this->assertSame("`foo` ENUM('BAR','BAZ') NOT NULL", $sql);
     }
 
     /** @test */
@@ -114,9 +114,9 @@ class StructureBuilderTest extends TestCase
 
         $column = $structure->enum('foo', ['BAR', 'BAZ'])->default('BAR');
 
-        $sql = (new ColumnTranslateManager())->translate([$column]);
+        $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
-        $this->assertSame("`foo` ENUM('BAR','BAZ') NOT NULL DEFAULT('BAR')", $sql[0]);
+        $this->assertSame("`foo` ENUM('BAR','BAZ') NOT NULL DEFAULT('BAR')", $sql);
     }
 
     /** @test */
@@ -126,9 +126,9 @@ class StructureBuilderTest extends TestCase
 
         $column = $structure->number('foo', Type::Int)->primary();
 
-        $sql = (new ColumnTranslateManager())->translate([$column]);
+        $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
-        $this->assertSame("`foo` INT NOT NULL PRIMARY KEY", $sql[0]);
+        $this->assertSame("`foo` INT NOT NULL PRIMARY KEY", $sql);
     }
 
     /** @test */
@@ -139,9 +139,9 @@ class StructureBuilderTest extends TestCase
         $structure->number('foo', Type::Int)->nullable()->default(1);
         $structure->number('bar', Type::Int)->default(2)->nullable();
 
-        $columns = $structure->done();
+        $columns = $structure->done()[0];
 
-        $sql = (new ColumnTranslateManager())->translate($columns[0]);
+        $sql = (new ColumnTranslateManager())->translate($columns);
 
         $this->assertSame("`foo` INT NULL , `bar` INT NULL", "{$sql[0]} , {$sql[1]}");
     }
@@ -154,10 +154,25 @@ class StructureBuilderTest extends TestCase
         $structure->number('foo', Type::Int)->nullable();
         $structure->string('bar', 100)->unique();
 
-        $columns = $structure->done();
+        $columns = $structure->done()[0];
 
-        $sql = (new ColumnTranslateManager())->translate($columns[0]);
+        $sql = (new ColumnTranslateManager())->translate($columns);
 
         $this->assertSame("`foo` INT NULL , `bar` VARCHAR(100) NOT NULL UNIQUE", "{$sql[0]} , {$sql[1]}");
+    }
+
+    /** @test */
+    public function createCustomColumnsTest()
+    {
+        $structure = new Structure('test');
+
+        $structure->boolean('foo')->default(1);
+        $structure->double('bar')->nullable();
+
+        $columns = $structure->done()[0];
+
+        $sql = (new ColumnTranslateManager())->translate($columns);
+
+        $this->assertSame("`foo` BOOLEAN NOT NULL DEFAULT('1') , `bar` DOUBLE NULL", "{$sql[0]} , {$sql[1]}");
     }
 }

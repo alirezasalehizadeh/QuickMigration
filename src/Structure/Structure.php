@@ -60,4 +60,9 @@ class Structure
         return [$this->columns, ['table' => $this->table]];
     }
 
+    public function __call($name, $arguments)
+    {
+        return $this->columns[] = new Column($arguments[0], strtoupper($name));
+    }
+
 }

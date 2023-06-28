@@ -1,6 +1,6 @@
 <?php
 
-namespace Alirezasalehizadeh\QuickMigration\Test\Translator\CommandTranslator;
+namespace Alirezasalehizadeh\QuickMigration\Test\Command\CommandTranslator;
 
 use Alirezasalehizadeh\QuickMigration\Command\Commands\CreateTableCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\DropIfExistsTableCommand;
