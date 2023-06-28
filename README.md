@@ -102,7 +102,7 @@ To create a column, it is enough to set the `method name` equal to the `column t
 
 $structure = new Structure('table name');
 
-$structure->tinytext('foo');
+$structure->tinyText('foo');
 // ...
 ```
 
