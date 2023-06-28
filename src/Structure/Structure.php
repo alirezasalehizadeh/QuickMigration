@@ -25,7 +25,7 @@ class Structure
             ->attribute(Attribute::Unsigned);
     }
 
-    public function string(string $name, int $length)
+    public function string(string $name, int $length = 255)
     {
         return $this->columns[] = new Column($name, Type::Varchar, $length);
     }
