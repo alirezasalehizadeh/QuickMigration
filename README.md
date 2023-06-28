@@ -94,11 +94,11 @@ $structure->number('test', Type::Int)
 ->autoIncrement();          // Set this auto increment
 ```
 #### Custom column:
-Sometimes it happens that you need a specific type of column that is not available in the enum `Type` class and you have to create it manually. `QuickMigration` has provided you with a quick and easy way to create a specific type of column!
+Sometimes it happens that you need a specific type of column that is not available in `Type` enum and you have to create it manually. `QuickMigration` has provided you with a quick and easy way to create a specific type of column!
 
 To create a column, it is enough to set the `method name` equal to the `column type` and write the `column name` in the `first argument`, like this:
 ```php
-// TINYTEXT type not defined in Type class
+// TINYTEXT type not defined in `Type` enum
 
 $structure = new Structure('table name');
 
