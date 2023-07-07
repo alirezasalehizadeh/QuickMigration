@@ -81,9 +81,11 @@ $structure->string(string $name, int $length);
 $structure->number(string $name, Type $type);
 $structure->text(string $name);
 $structure->timestamp(string $name);
-$structure->json(string $name)
-$structure->enum(string $name, array $enums)
+$structure->json(string $name);
+$structure->enum(string $name, array $enums);
+$structure->foreign(string $name, array $references);
 ```
+*NOTE: See the [Test](https://github.com/alirezasalehizadeh/QuickMigration/blob/1.6.x/test/Structure/StructureBuilderTest.php) file for examples
 #### Column attributes:
 ```php
 $structure->number('test', Type::Int)
