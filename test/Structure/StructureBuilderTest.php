@@ -175,4 +175,16 @@ class StructureBuilderTest extends TestCase
 
         $this->assertSame("`foo` BOOLEAN NOT NULL DEFAULT('1') , `bar` DOUBLE NULL", "{$sql[0]} , {$sql[1]}");
     }
+
+    /** @test */
+    public function createForeignColumnTest()
+    {
+        $structure = new Structure('test');
+
+        $column = $structure->foreign('foo', ['table' => 'bar', 'column' => 'id']);
+
+        $sql = (new ColumnTranslateManager("MySql"))->translate([$column])[0];
+
+        $this->assertSame("`foo` INT NOT NULL , FOREIGN KEY (foo) REFERENCES `bar`(id)", $sql);
+    }
 }

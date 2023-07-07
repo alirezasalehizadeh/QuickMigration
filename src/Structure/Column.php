@@ -20,6 +20,8 @@ class Column
 
     private $autoIncrement;
 
+    private $foreignKey;
+
     public function __construct(string $name, Type|string $type, mixed $value = null)
     {
         $this->name = $name;
@@ -107,5 +109,17 @@ class Column
     public function getAutoIncrement()
     {
         return $this->autoIncrement;
+    }
+
+    public function setForeignKey(array $references)
+    {
+        $this->foreignKey = $references;
+
+        return $this;
+    }
+
+    public function getForeignKey()
+    {
+        return $this->foreignKey;
     }
 }

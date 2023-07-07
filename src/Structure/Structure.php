@@ -55,6 +55,11 @@ class Structure
         return $this->columns[] = (new Column($name, Type::Enum, $enums));
     }
 
+    public function foreign(string $name, array $references)
+    {
+        return $this->number($name, Type::Int)->setForeignKey($references);
+    }
+
     public function done()
     {
         return [$this->columns, ['table' => $this->table]];

@@ -12,7 +12,7 @@ class MySqlTranslator extends ColumnTranslator
 
     protected $column;
 
-    protected $pattern = "`%s` %s %s %s %s %s %s";
+    protected $pattern = "`%s` %s %s %s %s %s %s %s";
 
     public function setColumn(Column $column)
     {
@@ -31,6 +31,7 @@ class MySqlTranslator extends ColumnTranslator
             $this->matchDefault(),
             $this->matchAutoIncrement(),
             $this->matchIndex(),
+            $this->matchForeignKey(),
         )));
     }
 
@@ -86,5 +87,19 @@ class MySqlTranslator extends ColumnTranslator
             Index::Unique->value => " UNIQUE ",
             default => null
         };
+    }
+
+    public function matchForeignKey()
+    {
+        return $this->column->getForeignKey()
+
+        ? sprintf(
+            ", FOREIGN KEY (%s) REFERENCES `%s`(%s)",
+            $this->column->getName(),
+            $this->column->getForeignKey()['table'],
+            $this->column->getForeignKey()['column']
+        )
+
+        : null;
     }
 }

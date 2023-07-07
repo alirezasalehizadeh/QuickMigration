@@ -20,4 +20,6 @@ interface ColumnTranslatorInterface
     public function matchDefault();
 
     public function matchAttribute();
+
+    public function matchForeignKey();
 }
