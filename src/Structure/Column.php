@@ -10,7 +10,7 @@ class Column
 {
     private $name, $type, $value;
 
-    private $index;
+    private $index = [];
 
     private $attribute;
 
@@ -41,9 +41,9 @@ class Column
         return $this;
     }
 
-    public function index(Index $index = null)
+    public function setIndex(Index $index = null)
     {
-        $this->index = $index;
+        $this->index[] = $index;
         return $this;
     }
 
@@ -61,12 +61,22 @@ class Column
 
     public function primary()
     {
-        return $this->index(Index::Primary);
+        return $this->setIndex(Index::Primary);
     }
 
     public function unique()
     {
-        return $this->index(Index::Unique);
+        return $this->setIndex(Index::Unique);
+    }
+
+    public function unsigned()
+    {
+        return $this->attribute(Attribute::Unsigned);
+    }
+
+    public function index()
+    {
+        return $this->setIndex(Index::Index);
     }
 
     public function getName()
@@ -88,12 +98,12 @@ class Column
 
     public function getIndex()
     {
-        return $this->index?->value;
+        return $this->index;
     }
 
     public function getAttribute()
     {
-        return $this->attribute?->value;
+        return $this->attribute;
     }
 
     public function getDefault()

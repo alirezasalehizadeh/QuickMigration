@@ -28,7 +28,7 @@ class StructureBuilderTest extends TestCase
     {
         $structure = new Structure('test');
 
-        $column = $structure->number('foo', Type::Int)->autoIncrement();
+        $column = $structure->number('foo')->autoIncrement();
 
         $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
@@ -40,7 +40,7 @@ class StructureBuilderTest extends TestCase
     {
         $structure = new Structure('test');
 
-        $column = $structure->number('foo', Type::Tinyint)->default(1);
+        $column = $structure->tinyInt('foo')->default(1);
 
         $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
@@ -52,7 +52,7 @@ class StructureBuilderTest extends TestCase
     {
         $structure = new Structure('test');
 
-        $column = $structure->number('foo', Type::Bigint)->attribute(Attribute::Unsigned);
+        $column = $structure->bigInt('foo')->unsigned();
 
         $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
@@ -124,7 +124,7 @@ class StructureBuilderTest extends TestCase
     {
         $structure = new Structure('test');
 
-        $column = $structure->number('foo', Type::Int)->primary();
+        $column = $structure->number('foo')->primary();
 
         $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
@@ -136,8 +136,8 @@ class StructureBuilderTest extends TestCase
     {
         $structure = new Structure('test');
 
-        $structure->number('foo', Type::Int)->nullable()->default(1);
-        $structure->number('bar', Type::Int)->default(2)->nullable();
+        $structure->number('foo')->nullable()->default(1);
+        $structure->number('bar')->default(2)->nullable();
 
         $columns = $structure->done()[0];
 
@@ -151,7 +151,7 @@ class StructureBuilderTest extends TestCase
     {
         $structure = new Structure('test');
 
-        $structure->number('foo', Type::Int)->nullable();
+        $structure->number('foo')->nullable();
         $structure->string('bar', 100)->unique();
 
         $columns = $structure->done()[0];
@@ -186,5 +186,17 @@ class StructureBuilderTest extends TestCase
         $sql = (new ColumnTranslateManager("MySql"))->translate([$column])[0];
 
         $this->assertSame("`foo` INT NOT NULL , FOREIGN KEY (foo) REFERENCES `bar`(id)", $sql);
+    }
+
+    /** @test */
+    public function createIndexedColumnTest()
+    {
+        $structure = new Structure('test');
+
+        $column = $structure->string('foo')->index()->unique();
+
+        $sql = (new ColumnTranslateManager())->translate([$column])[0];
+
+        $this->assertSame("`foo` VARCHAR(255) NOT NULL UNIQUE , INDEX(foo)", $sql);
     }
 }

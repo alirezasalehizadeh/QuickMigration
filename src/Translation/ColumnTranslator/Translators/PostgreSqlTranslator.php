@@ -75,16 +75,29 @@ class PostgreSqlTranslator extends ColumnTranslator
 
     public function matchAttribute()
     {
-        return $this->column->getAttribute();
+        return $this->column->getAttribute()?->value;
     }
 
     public function matchIndex()
     {
-        return match ($this->column->getIndex()) {
+        $result = '';
 
-            Index::Primary->value => " PRIMARY KEY ",
-            Index::Unique->value => " UNIQUE ",
-            default => null
-        };
+        foreach ($this->column->getIndex() as $index) {
+
+            if ($index === Index::Primary) {
+                $result .= " PRIMARY KEY ";
+            }
+
+            if ($index === Index::Unique) {
+                $result .= " UNIQUE ";
+            }
+        }
+
+        // The INDEX statement are out of loop because this separate from other index with comma
+        if (in_array(Index::Index, $this->column->getIndex())) {
+            $result .= ", INDEX({$this->column->getName()}) ";
+        }
+
+        return $result;
     }
 }

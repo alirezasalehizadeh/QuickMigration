@@ -19,10 +19,10 @@ class Structure
 
     public function id()
     {
-        return $this->columns[] = (new Column('id', Type::Bigint))
+        return $this->columns[] = (new Column('id', 'BIGINT'))
             ->autoIncrement()
             ->primary()
-            ->attribute(Attribute::Unsigned);
+            ->unsigned();
     }
 
     public function string(string $name, int $length = 255)
@@ -30,9 +30,9 @@ class Structure
         return $this->columns[] = new Column($name, Type::Varchar, $length);
     }
 
-    public function number(string $name, Type $type)
+    public function number(string $name)
     {
-        return $this->columns[] = new Column($name, $type);
+        return $this->columns[] = new Column($name, Type::Int);
     }
 
     public function text(string $name)
@@ -57,7 +57,7 @@ class Structure
 
     public function foreign(string $name, array $references)
     {
-        return $this->number($name, Type::Int)->setForeignKey($references);
+        return $this->number($name)->setForeignKey($references);
     }
 
     public function done()
