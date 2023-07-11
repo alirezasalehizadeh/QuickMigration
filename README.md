@@ -88,7 +88,7 @@ $structure->foreign(string $name, array $references);
 *NOTE: See the [Structure Test](https://github.com/alirezasalehizadeh/QuickMigration/blob/1.6.x/test/Structure/StructureBuilderTest.php) file for examples
 #### Column attributes:
 ```php
-$structure->number('test', Type::Int)
+$structure->number('test')
 ->primary()                 // Set this as primary key
 ->nullable()                // Set this nullable or not
 ->unique()                  // Set this unique
