@@ -41,13 +41,15 @@ abstract class Migration implements MigrationInterface
     public function drop(string $table)
     {
         $command = (new DropTableCommand($this->database, $table))->getCommand();
-        $this->sql[] = (new DropTableCommandTranslator($command))->make();
+        $this->sql['drop'] = (new DropTableCommandTranslator($command))->make();
+        $this->run($this->sql['drop']);
     }
 
     public function dropIfExists(string $table)
     {
         $command = (new DropIfExistsTableCommand($this->database, $table))->getCommand();
-        $this->sql[] = (new DropIfExistsTableCommandTranslator($command))->make();
+        $this->sql['dropIfExists'] = (new DropIfExistsTableCommandTranslator($command))->make();
+        $this->run($this->sql['dropIfExists']);
     }
 
     public function migrate()
@@ -61,19 +63,19 @@ abstract class Migration implements MigrationInterface
 
         //  Make `CREATE TABLE` sql command by `CreateTableCommand` object
         $command = (new CreateTableCommand($this->database, $attribute['table'], $columnCommands))->getCommand();
-        $this->sql[] = (new CreateTableCommandTranslator($command))->make();
+        $this->sql['migrate'] = (new CreateTableCommandTranslator($command))->make();
     }
 
     public function createIndex(string $name, string $table, array $columns)
     {
         $command = (new CreateIndexCommand($name, $table, $columns))->getCommand();
-        $this->sql[] = (new CreateIndexCommandTranslator($command))->make();
+        $this->sql['createIndex'] = (new CreateIndexCommandTranslator($command))->make();
     }
 
     public function dropIndex(string $name, string $table)
     {
         $command = (new DropIndexCommand($name, $table))->getCommand();
-        $this->sql[] = (new DropIndexCommandTranslator($command))->make();
+        $this->sql['dropIndex'] = (new DropIndexCommandTranslator($command))->make();
     }
 
     private function run(string $sql)

@@ -5,6 +5,7 @@ namespace Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\Transla
 use Alirezasalehizadeh\QuickMigration\Enums\Index;
 use Alirezasalehizadeh\QuickMigration\Enums\Type;
 use Alirezasalehizadeh\QuickMigration\Structure\Column;
+use Alirezasalehizadeh\QuickMigration\Structure\Foreign;
 use Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\ColumnTranslator;
 
 class MySqlTranslator extends ColumnTranslator
@@ -12,7 +13,7 @@ class MySqlTranslator extends ColumnTranslator
 
     protected $column;
 
-    protected $pattern = "`%s` %s %s %s %s %s %s %s";
+    protected $pattern = "`%s` %s %s %s %s %s %s";
 
     public function setColumn(Column $column)
     {
@@ -22,7 +23,11 @@ class MySqlTranslator extends ColumnTranslator
 
     public function make(): string
     {
-        return trim(preg_replace('/\s+/', ' ', sprintf(
+        if ($this->column instanceof Foreign) {
+            return $this->matchForeignKey();
+        }
+
+        return $this->trimString(sprintf(
             $this->pattern,
             $this->matchName(),
             $this->matchType(),
@@ -31,8 +36,7 @@ class MySqlTranslator extends ColumnTranslator
             $this->matchDefault(),
             $this->matchAutoIncrement(),
             $this->matchIndex(),
-            $this->matchForeignKey(),
-        )));
+        ));
     }
 
     public function matchName()
@@ -81,38 +85,40 @@ class MySqlTranslator extends ColumnTranslator
 
     public function matchIndex()
     {
-        $result = '';
+        $columnIndex = '';
 
         foreach ($this->column->getIndex() as $index) {
 
             if ($index === Index::Primary) {
-                $result .= " PRIMARY KEY ";
+                $columnIndex .= " PRIMARY KEY ";
             }
 
             if ($index === Index::Unique) {
-                $result .= " UNIQUE ";
+                $columnIndex .= " UNIQUE ";
             }
         }
 
         // The INDEX statement are out of loop because this separate from other index with comma
         if (in_array(Index::Index, $this->column->getIndex())) {
-            $result .= ", INDEX({$this->column->getName()}) ";
+            $columnIndex .= ", INDEX({$this->column->getName()}) ";
         }
 
-        return $result;
-    }   
+        return $columnIndex;
+    }
 
     public function matchForeignKey()
     {
-        return $this->column->getForeignKey()
+        return $this->trimString(sprintf(
+            "FOREIGN KEY (%s) REFERENCES `%s`(%s) %s %s",
+            $this->column->getName(),
+            $this->column->getReference(),
+            $this->column->getOn(),
+            $this->column->getCascadeOnUpdate() ? "ON UPDATE CASCADE" : null,
+            $this->column->getCascadeOnDelete() ? "ON DELETE CASCADE" : null,
+        ));
+    }
 
-            ? sprintf(
-                ", FOREIGN KEY (%s) REFERENCES `%s`(%s)",
-                $this->column->getName(),
-                $this->column->getForeignKey()['table'],
-                $this->column->getForeignKey()['column']
-            )
-
-            : null;
+    private function trimString(string $string){
+        return trim(preg_replace('/\s+/', ' ', $string));
     }
 }

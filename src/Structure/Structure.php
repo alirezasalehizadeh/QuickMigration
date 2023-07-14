@@ -1,7 +1,7 @@
 <?php
+
 namespace Alirezasalehizadeh\QuickMigration\Structure;
 
-use Alirezasalehizadeh\QuickMigration\Enums\Attribute;
 use Alirezasalehizadeh\QuickMigration\Enums\Type;
 use Alirezasalehizadeh\QuickMigration\Structure\Column;
 
@@ -19,7 +19,7 @@ class Structure
 
     public function id()
     {
-        return $this->columns[] = (new Column('id', 'BIGINT'))
+        $this->bigInt('id')
             ->autoIncrement()
             ->primary()
             ->unsigned();
@@ -55,9 +55,9 @@ class Structure
         return $this->columns[] = (new Column($name, Type::Enum, $enums));
     }
 
-    public function foreign(string $name, array $references)
+    public function foreign(string $column)
     {
-        return $this->number($name)->setForeignKey($references);
+        return $this->columns[] = (new Foreign($column, ''));
     }
 
     public function done()
@@ -67,7 +67,18 @@ class Structure
 
     public function __call($name, $arguments)
     {
+        if (str_starts_with($name, 'foreign')) {
+            $column = strtolower(
+                preg_replace(
+                    '/(?<!^)[A-Z]/',
+                    '_$0',
+                    explode('foreign', $name)[1]
+                )
+            );
+
+            return $this->foreign($column);
+        }
+
         return $this->columns[] = new Column($arguments[0], strtoupper($name));
     }
-
 }

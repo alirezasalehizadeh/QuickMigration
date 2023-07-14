@@ -181,11 +181,47 @@ class StructureBuilderTest extends TestCase
     {
         $structure = new Structure('test');
 
-        $column = $structure->foreign('foo', ['table' => 'bar', 'column' => 'id']);
+        $structure->foreign('foo')->reference('bar')->on('id')->cascadeOnDelete();
 
-        $sql = (new ColumnTranslateManager("MySql"))->translate([$column])[0];
+        $columns = $structure->done()[0];
 
-        $this->assertSame("`foo` INT NOT NULL , FOREIGN KEY (foo) REFERENCES `bar`(id)", $sql);
+        $sql = (new ColumnTranslateManager("MySql"))->translate($columns)[0];
+
+        $this->assertSame("FOREIGN KEY (foo) REFERENCES `bar`(id) ON DELETE CASCADE", $sql);
+    }
+
+    /** @test */
+    public function createForeignIdColumnTest()
+    {
+        $structure = new Structure('test');
+
+        $structure->id();
+        $structure->foreignBarId()->reference('bar')->on('id')->cascadeOnUpdate();
+        
+        $columns = $structure->done()[0];
+
+        $sql = (new ColumnTranslateManager("MySql"))->translate($columns);
+
+        $this->assertSame("`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, FOREIGN KEY (bar_id) REFERENCES `bar`(id) ON UPDATE CASCADE", "{$sql[0]}, {$sql[1]}");
+    }
+
+    /** @test */
+    public function createRelationTest()
+    {
+        $userStructure = new Structure('users');
+        $userStructure->number('id')->primary()->autoIncrement();
+        $usersColumn = $userStructure->done()[0];
+
+        $postStructure = new Structure('posts');
+        $postStructure->number('user_id');
+        $postStructure->foreign('user_id')->reference('users')->on('id')->cascadeOnDelete();
+        $postsColumn = $postStructure->done()[0];
+
+        $userSql = (new ColumnTranslateManager("MySql"))->translate($usersColumn)[0];
+        $postSql = (new ColumnTranslateManager("MySql"))->translate($postsColumn);
+
+        $this->assertSame("`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY", $userSql);
+        $this->assertSame("`user_id` INT NOT NULL, FOREIGN KEY (user_id) REFERENCES `users`(id) ON DELETE CASCADE", "{$postSql[0]}, {$postSql[1]}");
     }
 
     /** @test */

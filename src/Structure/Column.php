@@ -20,8 +20,6 @@ class Column
 
     private $autoIncrement;
 
-    private $foreignKey;
-
     public function __construct(string $name, Type|string $type, mixed $value = null)
     {
         $this->name = $name;
@@ -29,15 +27,15 @@ class Column
         $this->value = $value;
     }
 
-    public function nullable(bool $status = true)
+    public function nullable(bool $nullable = true)
     {
-        $this->nullable = $status;
+        $this->nullable = $nullable;
         return $this;
     }
 
-    public function autoIncrement(bool $status = true)
+    public function autoIncrement(bool $autoIncrement = true)
     {
-        $this->autoIncrement = $status;
+        $this->autoIncrement = $autoIncrement;
         return $this;
     }
 
@@ -121,15 +119,4 @@ class Column
         return $this->autoIncrement;
     }
 
-    public function setForeignKey(array $references)
-    {
-        $this->foreignKey = $references;
-
-        return $this;
-    }
-
-    public function getForeignKey()
-    {
-        return $this->foreignKey;
-    }
 }

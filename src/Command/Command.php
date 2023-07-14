@@ -13,7 +13,6 @@ class Command
 
     private array $includes = [];
 
-
     public function getName()
     {
         return $this->name->value;
