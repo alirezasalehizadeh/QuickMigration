@@ -83,7 +83,7 @@ $structure->text(string $name);
 $structure->timestamp(string $name);
 $structure->json(string $name);
 $structure->enum(string $name, array $enums);
-$structure->foreign(string $name, array $references);
+$structure->foreign(string $column)->reference(string $table)->on(string $column)->cascadeOnDelete()->cascadeOnUpdate();
 ```
 *NOTE: See the [Structure Test](https://github.com/alirezasalehizadeh/QuickMigration/blob/1.6.x/test/Structure/StructureBuilderTest.php) file for examples
 #### Column attributes:
@@ -97,7 +97,7 @@ $structure->number('test')
 ->index()                   // Index this column
 ->unsigned()                // Set unsigned attribute
 ```
-#### Custom column:
+#### Custom Column:
 Sometimes it happens that you need a specific type of column that is not available in `Type` enum and you have to create it manually. `QuickMigration` has provided you with a quick and easy way to create a specific type of column!
 
 To create a column, it is enough to set the `method name` equal to the `column type` and write the `column name` in the `first argument`, like this:
@@ -132,6 +132,17 @@ DROP TABLE IF EXISTS `foo`.`bar`
 CREATE TABLE `foo`.`bar` (`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, ...)
 **/
 
+```
+
+#### Custom Foreign Key:
+A quick way to create a foreignkey is this that the `name of the method` must to be`foreign + {foreignColumnName}`:
+```php
+$structure = new Structure('table name');
+
+$structure->foreign('bar_id')->reference('bar')->on('id');
+// OR
+$structure->foreignBarId()->reference('bar')->on('id');
+// ...
 ```
 
 
