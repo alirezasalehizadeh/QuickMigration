@@ -83,7 +83,7 @@ $structure->text(string $name);
 $structure->timestamp(string $name);
 $structure->json(string $name);
 $structure->enum(string $name, array $enums);
-$structure->foreign(string $column)->reference(string $table)->on(string $column)->cascadeOnDelete()->cascadeOnUpdate();
+$structure->foreign(string $column)->reference(string $column)->on(string $table)->cascadeOnDelete()->cascadeOnUpdate();
 ```
 *NOTE: See the [Structure Test](https://github.com/alirezasalehizadeh/QuickMigration/blob/1.6.x/test/Structure/StructureBuilderTest.php) file for examples
 #### Column attributes:
