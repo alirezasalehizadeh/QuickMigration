@@ -111,8 +111,8 @@ class MySqlTranslator extends ColumnTranslator
         return $this->trimString(sprintf(
             "FOREIGN KEY (%s) REFERENCES `%s`(%s) %s %s",
             $this->column->getName(),
-            $this->column->getReference(),
             $this->column->getOn(),
+            $this->column->getReference(),
             $this->column->getCascadeOnUpdate() ? "ON UPDATE CASCADE" : null,
             $this->column->getCascadeOnDelete() ? "ON DELETE CASCADE" : null,
         ));

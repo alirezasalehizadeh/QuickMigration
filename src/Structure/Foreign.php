@@ -18,9 +18,9 @@ class Foreign extends Column
         return $this->reference;
     }
 
-    public function reference($table)
+    public function reference(string $column)
     {
-        $this->reference = $table;
+        $this->reference = $column;
 
         return $this;
     }
@@ -30,9 +30,9 @@ class Foreign extends Column
         return $this->on;
     }
 
-    public function on($column)
+    public function on(string $table)
     {
-        $this->on = $column;
+        $this->on = $table;
 
         return $this;
     }
@@ -42,7 +42,7 @@ class Foreign extends Column
         return $this->cascadeOnDelete;
     }
 
-    public function cascadeOnDelete($onDelete = true)
+    public function cascadeOnDelete(bool $onDelete = true)
     {
         $this->cascadeOnDelete = $onDelete;
         return $this;
@@ -53,7 +53,7 @@ class Foreign extends Column
         return $this->cascadeOnUpdate;
     }
 
-    public function cascadeOnUpdate($onUpdate = true)
+    public function cascadeOnUpdate(bool $onUpdate = true)
     {
         $this->cascadeOnUpdate = $onUpdate;
         return $this;

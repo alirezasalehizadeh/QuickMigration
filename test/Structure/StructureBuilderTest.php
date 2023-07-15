@@ -181,7 +181,7 @@ class StructureBuilderTest extends TestCase
     {
         $structure = new Structure('test');
 
-        $structure->foreign('foo')->reference('bar')->on('id')->cascadeOnDelete();
+        $structure->foreign('foo')->reference('id')->on('bar')->cascadeOnDelete();
 
         $columns = $structure->done()[0];
 
@@ -196,7 +196,7 @@ class StructureBuilderTest extends TestCase
         $structure = new Structure('test');
 
         $structure->id();
-        $structure->foreignBarId()->reference('bar')->on('id')->cascadeOnUpdate();
+        $structure->foreignBarId()->reference('id')->on('bar')->cascadeOnUpdate();
         
         $columns = $structure->done()[0];
 
@@ -214,7 +214,7 @@ class StructureBuilderTest extends TestCase
 
         $postStructure = new Structure('posts');
         $postStructure->number('user_id');
-        $postStructure->foreign('user_id')->reference('users')->on('id')->cascadeOnDelete();
+        $postStructure->foreign('user_id')->reference('id')->on('users')->cascadeOnDelete();
         $postsColumn = $postStructure->done()[0];
 
         $userSql = (new ColumnTranslateManager("MySql"))->translate($usersColumn)[0];
