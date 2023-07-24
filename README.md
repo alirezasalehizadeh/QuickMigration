@@ -106,7 +106,7 @@ To create a column, it is enough to set the `method name` equal to the `column t
 
 $structure = new Structure('table name');
 
-$structure->tinytext('foo');
+$structure->tinyText('foo');
 // ...
 ```
 #### Commands:
@@ -139,9 +139,9 @@ A quick way to create a foreignkey is this that the `name of the method` must to
 ```php
 $structure = new Structure('table name');
 
-$structure->foreign('bar_id')->reference('bar')->on('id');
+$structure->foreign('bar_id')->reference('id')->on('bar');
 // OR
-$structure->foreignBarId()->reference('bar')->on('id');
+$structure->foreignBarId()->reference('id')->on('bar');
 // ...
 ```
 
