@@ -2,19 +2,19 @@
 
 namespace Alirezasalehizadeh\QuickMigration;
 
-use Alirezasalehizadeh\QuickMigration\Command\Commands\CreateIndexCommand;
 use PDO;
 use Alirezasalehizadeh\QuickMigration\MigrationInterface;
+use Alirezasalehizadeh\QuickMigration\Command\Commands\DropIndexCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\DropTableCommand;
+use Alirezasalehizadeh\QuickMigration\Command\Commands\CreateIndexCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\CreateTableCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\DropIfExistsTableCommand;
-use Alirezasalehizadeh\QuickMigration\Command\Commands\DropIndexCommand;
 use Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\ColumnTranslateManager;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\CreateIndexCommandTranslator;
+use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropIndexCommandTranslator;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropTableCommandTranslator;
+use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\CreateIndexCommandTranslator;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\CreateTableCommandTranslator;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropIfExistsTableCommandTranslator;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropIndexCommandTranslator;
 
 abstract class Migration implements MigrationInterface
 {
@@ -24,7 +24,7 @@ abstract class Migration implements MigrationInterface
 
     private $connection;
 
-    private $sql;
+    private $sql = [];
 
     private $displayQuery = false;
 
@@ -54,15 +54,15 @@ abstract class Migration implements MigrationInterface
 
     public function migrate()
     {
-        $data = $this->set();
-        $columns = $data[0];
-        $attribute = $data[1];
+        $structureData = $this->set();
+        $columns = $structureData[0];
+        $table = $structureData[1]['table'];
 
         //  Translate column objects to sql string
         $columnCommands = (new ColumnTranslateManager($this->translator))->translate($columns);
 
         //  Make `CREATE TABLE` sql command by `CreateTableCommand` object
-        $command = (new CreateTableCommand($this->database, $attribute['table'], $columnCommands))->getCommand();
+        $command = (new CreateTableCommand($this->database, $table, $columnCommands))->getCommand();
         $this->sql['migrate'] = (new CreateTableCommandTranslator($command))->make();
     }
 
@@ -86,12 +86,12 @@ abstract class Migration implements MigrationInterface
     public function __toString()
     {
         $this->displayQuery = true;
-        return $this->sql ? implode("\n", $this->sql) : '';
+        return implode("\n", $this->sql);
     }
 
     public function __destruct()
     {
-        if(! $this->displayQuery && ! is_null($this->sql)){
+        if($this->displayQuery === false){
             foreach ($this->sql as $sql) {
                 $this->run($sql);
             }
