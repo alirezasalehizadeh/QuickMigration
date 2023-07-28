@@ -52,12 +52,12 @@ class Structure
 
     public function enum(string $name, array $enums)
     {
-        return $this->columns[] = (new Column($name, Type::Enum, $enums));
+        return $this->columns[] = new Column($name, Type::Enum, $enums);
     }
 
     public function foreign(string $column)
     {
-        return $this->columns[] = (new Foreign($column, ''));
+        return $this->columns[] = new Foreign($column, '');
     }
 
     public function done()
