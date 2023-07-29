@@ -139,7 +139,7 @@ class StructureBuilderTest extends TestCase
         $structure->number('foo')->nullable()->default(1);
         $structure->number('bar')->default(2)->nullable();
 
-        $columns = $structure->done()[0];
+        $columns = $structure->done()['columns'];
 
         $sql = (new ColumnTranslateManager())->translate($columns);
 
@@ -154,7 +154,7 @@ class StructureBuilderTest extends TestCase
         $structure->number('foo')->nullable();
         $structure->string('bar', 100)->unique();
 
-        $columns = $structure->done()[0];
+        $columns = $structure->done()['columns'];
 
         $sql = (new ColumnTranslateManager())->translate($columns);
 
@@ -169,7 +169,7 @@ class StructureBuilderTest extends TestCase
         $structure->boolean('foo')->default(1);
         $structure->double('bar')->nullable();
 
-        $columns = $structure->done()[0];
+        $columns = $structure->done()['columns'];
 
         $sql = (new ColumnTranslateManager())->translate($columns);
 
@@ -183,7 +183,7 @@ class StructureBuilderTest extends TestCase
 
         $structure->foreign('foo')->reference('id')->on('bar')->cascadeOnDelete();
 
-        $columns = $structure->done()[0];
+        $columns = $structure->done()['columns'];
 
         $sql = (new ColumnTranslateManager("MySql"))->translate($columns)[0];
 
@@ -198,7 +198,7 @@ class StructureBuilderTest extends TestCase
         $structure->id();
         $structure->foreignBarId()->reference('id')->on('bar')->cascadeOnUpdate();
         
-        $columns = $structure->done()[0];
+        $columns = $structure->done()['columns'];
 
         $sql = (new ColumnTranslateManager("MySql"))->translate($columns);
 
@@ -210,12 +210,12 @@ class StructureBuilderTest extends TestCase
     {
         $userStructure = new Structure('users');
         $userStructure->number('id')->primary()->autoIncrement();
-        $usersColumn = $userStructure->done()[0];
+        $usersColumn = $userStructure->done()['columns'];
 
         $postStructure = new Structure('posts');
         $postStructure->number('user_id');
         $postStructure->foreign('user_id')->reference('id')->on('users')->cascadeOnDelete();
-        $postsColumn = $postStructure->done()[0];
+        $postsColumn = $postStructure->done()['columns'];
 
         $userSql = (new ColumnTranslateManager("MySql"))->translate($usersColumn)[0];
         $postSql = (new ColumnTranslateManager("MySql"))->translate($postsColumn);

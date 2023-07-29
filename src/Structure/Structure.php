@@ -62,7 +62,7 @@ class Structure
 
     public function done()
     {
-        return [$this->columns, ['table' => $this->table]];
+        return ['columns' => $this->columns, 'table' => $this->table];
     }
 
     public function __call($name, $arguments)

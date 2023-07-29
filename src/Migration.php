@@ -55,8 +55,8 @@ abstract class Migration implements MigrationInterface
     public function migrate()
     {
         $structureData = $this->set();
-        $columns = $structureData[0];
-        $table = $structureData[1]['table'];
+        $columns = $structureData['columns'];
+        $table = $structureData['table'];
 
         //  Translate column objects to sql string
         $columnCommands = (new ColumnTranslateManager($this->translator))->translate($columns);
