@@ -23,6 +23,7 @@ Create a `xMigration` class like this that must extends from `\Alirezasalehizade
 
 use Alirezasalehizadeh\QuickMigration\Migration;
 use Alirezasalehizadeh\QuickMigration\Structure\Structure;
+use Alirezasalehizadeh\QuickMigration\Structure\StructureBuilder;
 
 class xMigration extends Migration
 {
@@ -33,14 +34,9 @@ class xMigration extends Migration
 
     public function set(): array
     {
-
-        $structure = new Structure('table name');
-
-
-        // Write your structure here...
-
-
-        return $structure->done();
+        return Structure::create('table_name', function (StructureBuilder $structure) {
+            // Write your structure here...
+        });
     }
 
 }
@@ -104,7 +100,7 @@ To create a column, it is enough to set the `method name` equal to the `column t
 ```php
 // TINYTEXT type not defined in `Type` enum
 
-$structure = new Structure('table name');
+$structure = new StructureBuilder('table name');
 
 $structure->tinyText('foo');
 // ...
@@ -137,7 +133,7 @@ CREATE TABLE `foo`.`bar` (`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY K
 #### Custom Foreign Key:
 A quick way to create a foreignkey is this that the `name of the method` must to be`foreign + {foreignColumnName}`:
 ```php
-$structure = new Structure('table name');
+$structure = new StructureBuilder('table name');
 
 $structure->foreign('bar_id')->reference('id')->on('bar');
 // OR
