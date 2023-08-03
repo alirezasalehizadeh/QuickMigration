@@ -2,11 +2,10 @@
 
 namespace Alirezasalehizadeh\QuickMigration\Test\Structure;
 
-use Alirezasalehizadeh\QuickMigration\Enums\Attribute;
-use Alirezasalehizadeh\QuickMigration\Enums\Type;
-use Alirezasalehizadeh\QuickMigration\Structure\Structure;
-use Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\ColumnTranslateManager;
 use PHPUnit\Framework\TestCase;
+use Alirezasalehizadeh\QuickMigration\Structure\Structure;
+use Alirezasalehizadeh\QuickMigration\Structure\StructureBuilder;
+use Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\ColumnTranslateManager;
 
 class StructureBuilderTest extends TestCase
 {
@@ -14,7 +13,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createNullableColumnTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $column = $structure->string('foo', 100)->nullable();
 
@@ -26,7 +25,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createColumnWithAutoIncrementTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $column = $structure->number('foo')->autoIncrement();
 
@@ -38,7 +37,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createColumnWithDefaultValueTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $column = $structure->tinyInt('foo')->default(1);
 
@@ -50,7 +49,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createColumnWithUnsignedAttributeTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $column = $structure->bigInt('foo')->unsigned();
 
@@ -62,7 +61,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createNotNullUniqueVarcharTypeColumnTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $column = $structure->string('foo', 100)->unique();
 
@@ -74,7 +73,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createTimestampTypeColumnTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $column = $structure->timestamp('foo');
 
@@ -86,7 +85,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createJsonTypeColumnTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $column = $structure->json('foo');
 
@@ -98,7 +97,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createEnumTypeColumnTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $column = $structure->enum('foo', ['BAR', 'BAZ']);
 
@@ -110,7 +109,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createEnumTypeColumnWithDefaultValueTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $column = $structure->enum('foo', ['BAR', 'BAZ'])->default('BAR');
 
@@ -122,7 +121,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createPrimaryColumnTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $column = $structure->number('foo')->primary();
 
@@ -134,7 +133,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createNullableColumnHaveNullDefaultValueTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $structure->number('foo')->nullable()->default(1);
         $structure->number('bar')->default(2)->nullable();
@@ -149,7 +148,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createNullableIntTypeColumnAndUniqueStringTypeColumnTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $structure->number('foo')->nullable();
         $structure->string('bar', 100)->unique();
@@ -164,7 +163,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createCustomColumnsTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $structure->boolean('foo')->default(1);
         $structure->double('bar')->nullable();
@@ -179,7 +178,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createForeignColumnTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $structure->foreign('foo')->reference('id')->on('bar')->cascadeOnDelete();
 
@@ -193,7 +192,7 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createForeignIdColumnTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $structure->id();
         $structure->foreignBarId()->reference('id')->on('bar')->cascadeOnUpdate();
@@ -208,11 +207,11 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createRelationTest()
     {
-        $userStructure = new Structure('users');
+        $userStructure = new StructureBuilder('users');
         $userStructure->number('id')->primary()->autoIncrement();
         $usersColumn = $userStructure->done()['columns'];
 
-        $postStructure = new Structure('posts');
+        $postStructure = new StructureBuilder('posts');
         $postStructure->number('user_id');
         $postStructure->foreign('user_id')->reference('id')->on('users')->cascadeOnDelete();
         $postsColumn = $postStructure->done()['columns'];
@@ -227,11 +226,23 @@ class StructureBuilderTest extends TestCase
     /** @test */
     public function createIndexedColumnTest()
     {
-        $structure = new Structure('test');
+        $structure = new StructureBuilder('test');
 
         $column = $structure->string('foo')->index()->unique();
 
         $sql = (new ColumnTranslateManager())->translate([$column])[0];
+
+        $this->assertSame("`foo` VARCHAR(255) NOT NULL UNIQUE , INDEX(foo)", $sql);
+    }
+
+    /** @test */
+    public function createStructureTest()
+    {
+        $structure = Structure::create('test', function (StructureBuilder $builder) {
+            $builder->string('foo')->index()->unique();
+        });
+
+        $sql = (new ColumnTranslateManager())->translate($structure['columns'])[0];
 
         $this->assertSame("`foo` VARCHAR(255) NOT NULL UNIQUE , INDEX(foo)", $sql);
     }
