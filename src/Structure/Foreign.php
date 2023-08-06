@@ -2,6 +2,7 @@
 
 namespace Alirezasalehizadeh\QuickMigration\Structure;
 
+use Alirezasalehizadeh\QuickMigration\Enums\Foreign as EnumsForeign;
 use Alirezasalehizadeh\QuickMigration\Structure\Column;
 
 class Foreign extends Column
@@ -11,23 +12,13 @@ class Foreign extends Column
 
     private $on;
 
-    private $cascadeOnDelete, $cascadeOnUpdate;
-
-    public function getReference()
-    {
-        return $this->reference;
-    }
+    private $onDelete, $onUpdate;
 
     public function reference(string $column)
     {
         $this->reference = $column;
 
         return $this;
-    }
-
-    public function getOn()
-    {
-        return $this->on;
     }
 
     public function on(string $table)
@@ -37,26 +28,77 @@ class Foreign extends Column
         return $this;
     }
 
-    public function getCascadeOnDelete()
+    public function onDelete(EnumsForeign $option)
     {
-        return $this->cascadeOnDelete;
-    }
+        $this->onDelete = $option;
 
-    public function cascadeOnDelete(bool $onDelete = true)
-    {
-        $this->cascadeOnDelete = $onDelete;
         return $this;
     }
 
-    public function getCascadeOnUpdate()
+    public function onUpdate(EnumsForeign $option)
     {
-        return $this->cascadeOnUpdate;
+        $this->onUpdate = $option;
+
+        return $this;
     }
 
-    public function cascadeOnUpdate(bool $onUpdate = true)
+    public function cascadeOnDelete()
     {
-        $this->cascadeOnUpdate = $onUpdate;
-        return $this;
+        return $this->onDelete(EnumsForeign::Cascade);
+    }
 
+    public function cascadeOnUpdate()
+    {
+        return $this->onUpdate(EnumsForeign::Cascade);
+    }
+
+    public function restrictOnDelete()
+    {
+        return $this->onDelete(EnumsForeign::Restrict);
+    }
+
+    public function restrictOnUpdate()
+    {
+        return $this->onUpdate(EnumsForeign::Restrict);
+    }
+
+    public function noActionOnDelete()
+    {
+        return $this->onDelete(EnumsForeign::NoAction);
+    }
+
+    public function noActionOnUpdate()
+    {
+        return $this->onUpdate(EnumsForeign::NoAction);
+    }
+
+    public function setNullOnDelete()
+    {
+        return $this->onDelete(EnumsForeign::SetNull);
+    }
+
+    public function setNullOnUpdate()
+    {
+        return $this->onUpdate(EnumsForeign::SetNull);
+    }
+
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    public function getOn()
+    {
+        return $this->on;
+    }
+
+    public function getOnDelete()
+    {
+        return $this->onDelete?->value;
+    }
+
+    public function getOnUpdate()
+    {
+        return $this->onUpdate?->value;
     }
 }

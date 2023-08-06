@@ -113,8 +113,8 @@ class MySqlTranslator extends ColumnTranslator
             $this->column->getName(),
             $this->column->getOn(),
             $this->column->getReference(),
-            $this->column->getCascadeOnUpdate() ? "ON UPDATE CASCADE" : null,
-            $this->column->getCascadeOnDelete() ? "ON DELETE CASCADE" : null,
+            $this->column->getOnUpdate() ? "ON UPDATE {$this->column->getOnUpdate()}" : null,
+            $this->column->getOnDelete() ? "ON DELETE {$this->column->getOnDelete()}" : null,
         ));
     }
 
