@@ -1,4 +1,5 @@
 <?php
+
 namespace Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators;
 
 use Alirezasalehizadeh\QuickMigration\Command\Command;
@@ -7,12 +8,10 @@ use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\CommandTrans
 class DropIfExistsTableCommandTranslator implements CommandTranslatorInterface
 {
 
-    public function __construct(
-        private Command $command
-    ){
-        $this->command = $command;    
+    public function __construct(private Command $command)
+    {
     }
-    
+
     public function make(): string
     {
         return sprintf(

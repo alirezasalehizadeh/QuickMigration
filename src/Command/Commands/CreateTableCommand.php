@@ -1,4 +1,5 @@
 <?php
+
 namespace Alirezasalehizadeh\QuickMigration\Command\Commands;
 
 use Alirezasalehizadeh\QuickMigration\Command\Command;
@@ -8,26 +9,21 @@ use Alirezasalehizadeh\QuickMigration\Enums\Command as EnumsCommand;
 class CreateTableCommand extends Command implements CommandInterface
 {
 
-    private $database, $table, $sqlCommands;
-
     protected $pattern = "%s `%s`.`%s` (%s)";
 
-    public function __construct(string $database, string $table, array $sqlCommands)
+    public function __construct(private string $database, private string $table, private array $sqlCommands)
     {
-        $this->database = $database;
-        $this->table = $table;
-        $this->sqlCommands = $sqlCommands;
     }
 
-    public function getCommand() : self
+    public function getCommand(): self
     {
         return $this
-        ->setName(EnumsCommand::Create)
-        ->setPattern($this->pattern)
-        ->setIncludes([
-            'database' => $this->database,
-            'table' => $this->table,
-            'sqlCommands' => $this->sqlCommands,
-        ]);
+            ->setName(EnumsCommand::Create)
+            ->setPattern($this->pattern)
+            ->setIncludes([
+                'database' => $this->database,
+                'table' => $this->table,
+                'sqlCommands' => $this->sqlCommands,
+            ]);
     }
 }

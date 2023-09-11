@@ -1,4 +1,5 @@
 <?php
+
 namespace Alirezasalehizadeh\QuickMigration\Command\Commands;
 
 use Alirezasalehizadeh\QuickMigration\Command\Command;
@@ -8,24 +9,20 @@ use Alirezasalehizadeh\QuickMigration\Enums\Command as EnumsCommand;
 class DropIndexCommand extends Command implements CommandInterface
 {
 
-    private $name, $table;
-
     protected $pattern = "%s %s DROP INDEX %s";
 
-    public function __construct(string $name, string $table)
+    public function __construct(private string $name, private string $table)
     {
-        $this->name = $name;
-        $this->table = $table;
     }
 
-    public function getCommand() : self
+    public function getCommand(): self
     {
         return $this
-        ->setName(EnumsCommand::AlterTable)
-        ->setPattern($this->pattern)
-        ->setIncludes([
-            'name' => $this->name,
-            'table' => $this->table,
-        ]);
+            ->setName(EnumsCommand::AlterTable)
+            ->setPattern($this->pattern)
+            ->setIncludes([
+                'name' => $this->name,
+                'table' => $this->table,
+            ]);
     }
 }

@@ -10,11 +10,8 @@ class StructureBuilder
 
     private $columns = [];
 
-    private $table;
-
-    public function __construct(string $table)
+    public function __construct(private string $table)
     {
-        $this->table = $table;
     }
 
     public function id()

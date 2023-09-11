@@ -1,4 +1,5 @@
 <?php
+
 namespace Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators;
 
 use Alirezasalehizadeh\QuickMigration\Command\Command;
@@ -7,13 +8,11 @@ use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\CommandTrans
 class CreateTableCommandTranslator implements CommandTranslatorInterface
 {
 
-    public function __construct(
-        private Command $command
-    ){
-        $this->command = $command;    
+    public function __construct(private Command $command)
+    {
     }
-    
-    public function make():string
+
+    public function make(): string
     {
         return sprintf(
             $this->command->getPattern(),
@@ -23,5 +22,4 @@ class CreateTableCommandTranslator implements CommandTranslatorInterface
             implode(',', $this->command->getIncludes()['sqlCommands']),
         );
     }
-
 }
