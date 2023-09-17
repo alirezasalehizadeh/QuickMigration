@@ -20,10 +20,6 @@ class CreateTableCommand extends Command implements CommandInterface
         return $this
             ->setName(EnumsCommand::Create)
             ->setPattern($this->pattern)
-            ->setIncludes([
-                'database' => $this->database,
-                'table' => $this->table,
-                'sqlCommands' => $this->sqlCommands,
-            ]);
+            ->setIncludes(get_object_vars($this));
     }
 }
