@@ -19,7 +19,6 @@ class DropTableCommand extends Command implements CommandInterface
     {
         return $this
             ->setName(EnumsCommand::Drop)
-            ->setPattern($this->pattern)
             ->setIncludes(get_object_vars($this));
     }
 }

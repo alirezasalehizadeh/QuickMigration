@@ -19,7 +19,6 @@ class CreateIndexCommand extends Command implements CommandInterface
     {
         return $this
             ->setName(EnumsCommand::CreateIndex)
-            ->setPattern($this->pattern)
             ->setIncludes(get_object_vars($this));
     }
 }

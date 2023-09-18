@@ -19,7 +19,6 @@ class DropIndexCommand extends Command implements CommandInterface
     {
         return $this
             ->setName(EnumsCommand::AlterTable)
-            ->setPattern($this->pattern)
             ->setIncludes(get_object_vars($this));
     }
 }

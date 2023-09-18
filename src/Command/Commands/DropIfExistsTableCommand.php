@@ -19,7 +19,6 @@ class DropIfExistsTableCommand extends Command implements CommandInterface
     {
         return $this
             ->setName(EnumsCommand::DropTableIfExists)
-            ->setPattern($this->pattern)
             ->setIncludes(get_object_vars($this));
     }
 }

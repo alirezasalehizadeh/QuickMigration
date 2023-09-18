@@ -9,7 +9,7 @@ class Command
 
     private EnumsCommand $name;
 
-    private string $pattern = '';
+    protected string $pattern = '';
 
     private array $includes = [];
 
@@ -28,13 +28,6 @@ class Command
     public function getPattern()
     {
         return $this->pattern;
-    }
-
-    public function setPattern(string $pattern)
-    {
-        $this->pattern = $pattern;
-
-        return $this;
     }
 
     public function getIncludes()
