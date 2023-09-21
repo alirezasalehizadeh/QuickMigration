@@ -76,6 +76,6 @@ class StructureBuilder
             return $this->foreign($column);
         }
 
-        return $this->columns[] = new Column($arguments[0], strtoupper($name));
+        return $this->columns[] = new Column($arguments[0], $name);
     }
 }

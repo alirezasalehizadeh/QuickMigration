@@ -2,16 +2,24 @@
 
 namespace Alirezasalehizadeh\QuickMigration\Test\Command\CommandTranslator;
 
+use Alirezasalehizadeh\QuickMigration\Command\Commands\AddColumnCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\CreateIndexCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\CreateTableCommand;
+use Alirezasalehizadeh\QuickMigration\Command\Commands\DropColumnCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\DropIfExistsTableCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\DropIndexCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\DropTableCommand;
+use Alirezasalehizadeh\QuickMigration\Command\Commands\ModifyColumnCommand;
+use Alirezasalehizadeh\QuickMigration\Enums\Type;
+use Alirezasalehizadeh\QuickMigration\Structure\Column;
+use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\AddColumnCommandTranslator;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\CreateIndexCommandTranslator;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\CreateTableCommandTranslator;
+use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropColumnCommandTranslator;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropIfExistsTableCommandTranslator;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropIndexCommandTranslator;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropTableCommandTranslator;
+use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\ModifyColumnCommandTranslator;
 use PHPUnit\Framework\TestCase;
 
 class CommandTranslatorTest extends TestCase
@@ -70,5 +78,39 @@ class CommandTranslatorTest extends TestCase
         $sql = (new DropIndexCommandTranslator($command))->make();
 
         $this->assertSame("ALTER TABLE bar DROP INDEX foo_baz_index", $sql);
+    }
+
+    /** @test */
+    public function canMakeDropColumnCommandTest()
+    {
+        $command = (new DropColumnCommand($this->table, 'baz'))->getCommand();
+
+        $sql = (new DropColumnCommandTranslator($command))->make();
+
+        $this->assertSame("ALTER TABLE `bar` DROP COLUMN baz", $sql);
+    }
+
+    /** @test */
+    public function canMakeAddColumnCommandTest()
+    {
+        $column = new Column('baz', Type::Varchar);
+
+        $command = (new AddColumnCommand($this->table, $column))->getCommand();
+
+        $sql = (new AddColumnCommandTranslator($command))->make();
+
+        $this->assertSame("ALTER TABLE `bar` ADD baz VARCHAR", $sql);
+    }
+
+    /** @test */
+    public function canMakeModifyColumnCommandTest()
+    {
+        $column = new Column('baz', Type::Text);
+
+        $command = (new ModifyColumnCommand($this->table, $column))->getCommand();
+
+        $sql = (new ModifyColumnCommandTranslator($command))->make();
+
+        $this->assertSame("ALTER TABLE `bar` MODIFY COLUMN baz TEXT", $sql);
     }
 }

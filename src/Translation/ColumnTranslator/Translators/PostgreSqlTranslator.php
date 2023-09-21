@@ -45,6 +45,10 @@ class PostgreSqlTranslator extends ColumnTranslator
         $type = $this->column->getType();
 
         if ($type === Type::Varchar->value) {
+            if($this->column->getValue() === null){
+                $type .= "(255)";
+                return $type;
+            }
             $type .= "({$this->column->getValue()})";
         }
 

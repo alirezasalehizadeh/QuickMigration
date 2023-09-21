@@ -9,7 +9,7 @@ use Alirezasalehizadeh\QuickMigration\Enums\Command as EnumsCommand;
 class CreateIndexCommand extends Command implements CommandInterface
 {
 
-    protected $pattern = "%s %s ON %s(%s)";
+    protected string $pattern = "%s %s ON %s(%s)";
 
     public function __construct(private string $name, private string $table, private array $columns)
     {

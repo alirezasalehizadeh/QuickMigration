@@ -9,7 +9,7 @@ use Alirezasalehizadeh\QuickMigration\Enums\Command as EnumsCommand;
 class DropTableCommand extends Command implements CommandInterface
 {
 
-    protected $pattern = "%s `%s`.`%s`";
+    protected string $pattern = "%s `%s`.`%s`";
 
     public function __construct(private string $database, private string $table)
     {

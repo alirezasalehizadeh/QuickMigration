@@ -5,20 +5,21 @@ namespace Alirezasalehizadeh\QuickMigration\Command\Commands;
 use Alirezasalehizadeh\QuickMigration\Command\Command;
 use Alirezasalehizadeh\QuickMigration\Command\CommandInterface;
 use Alirezasalehizadeh\QuickMigration\Enums\Command as EnumsCommand;
+use Alirezasalehizadeh\QuickMigration\Structure\Column;
 
-class CreateTableCommand extends Command implements CommandInterface
+class ModifyColumnCommand extends Command implements CommandInterface
 {
 
-    protected string $pattern = "%s `%s`.`%s` (%s)";
+    protected string $pattern = "%s `%s` MODIFY COLUMN %s";
 
-    public function __construct(private string $database, private string $table, private array $sqlCommands)
+    public function __construct(private string $table, private Column $column)
     {
     }
 
     public function getCommand(): self
     {
         return $this
-            ->setName(EnumsCommand::Create)
+            ->setName(EnumsCommand::AlterTable)
             ->setIncludes(get_object_vars($this));
     }
 }

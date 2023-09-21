@@ -7,7 +7,7 @@ use Alirezasalehizadeh\QuickMigration\Enums\Command as EnumsCommand;
 class Command
 {
 
-    private EnumsCommand $name;
+    private $name;
 
     protected string $pattern = '';
 

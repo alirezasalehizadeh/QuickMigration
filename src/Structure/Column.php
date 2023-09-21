@@ -84,9 +84,9 @@ class Column
 
     public function getType()
     {
-        return $this->type instanceof Type
+        return strtoupper($this->type instanceof Type
             ? $this->type->value
-            : $this->type;
+            : $this->type);
     }
 
     public function getValue()

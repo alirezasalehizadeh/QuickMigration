@@ -10,6 +10,7 @@ use Alirezasalehizadeh\QuickMigration\Command\Commands\CreateIndexCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\CreateTableCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\DropIfExistsTableCommand;
 use Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\ColumnTranslateManager;
+use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\TableAlterTranslationManager;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropIndexCommandTranslator;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropTableCommandTranslator;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\CreateIndexCommandTranslator;
@@ -76,6 +77,15 @@ abstract class Migration implements MigrationInterface
     {
         $command = (new DropIndexCommand($name, $table))->getCommand();
         $this->sql['dropIndex'] = (new DropIndexCommandTranslator($command))->make();
+    }
+
+    public function alterTable()
+    {
+        $alterCommands = $this->set();
+        $translatedCommands =  (new TableAlterTranslationManager($alterCommands))->translate();
+        foreach($translatedCommands as $command){
+            $this->sql[] = $command;
+        }
     }
 
     private function run(string $sql)
