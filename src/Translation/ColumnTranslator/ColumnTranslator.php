@@ -50,4 +50,8 @@ class ColumnTranslator implements ColumnTranslatorInterface
     public function matchForeignKey()
     {
     }
+
+    public function matchAfter()
+    {
+    }
 }

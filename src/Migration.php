@@ -10,12 +10,8 @@ use Alirezasalehizadeh\QuickMigration\Command\Commands\CreateIndexCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\CreateTableCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\DropIfExistsTableCommand;
 use Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\ColumnTranslateManager;
+use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\CommandTranslator;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\TableAlterTranslationManager;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropIndexCommandTranslator;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropTableCommandTranslator;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\CreateIndexCommandTranslator;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\CreateTableCommandTranslator;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropIfExistsTableCommandTranslator;
 
 abstract class Migration implements MigrationInterface
 {
@@ -42,14 +38,14 @@ abstract class Migration implements MigrationInterface
     public function drop(string $table)
     {
         $command = (new DropTableCommand($this->database, $table))->getCommand();
-        $this->sql['drop'] = (new DropTableCommandTranslator($command))->make();
+        $this->sql['drop'] = (new CommandTranslator($command))->dropTableCommandTranslator();
         $this->run($this->sql['drop']);
     }
 
     public function dropIfExists(string $table)
     {
         $command = (new DropIfExistsTableCommand($this->database, $table))->getCommand();
-        $this->sql['dropIfExists'] = (new DropIfExistsTableCommandTranslator($command))->make();
+        $this->sql['dropIfExists'] = (new CommandTranslator($command))->dropIfExistsTableCommandTranslator();
         $this->run($this->sql['dropIfExists']);
     }
 
@@ -64,19 +60,19 @@ abstract class Migration implements MigrationInterface
 
         //  Make `CREATE TABLE` sql command by `CreateTableCommand` object
         $command = (new CreateTableCommand($this->database, $table, $columnCommands))->getCommand();
-        $this->sql['migrate'] = (new CreateTableCommandTranslator($command))->make();
+        $this->sql['migrate'] = (new CommandTranslator($command))->createTableCommandTranslator();
     }
 
     public function createIndex(string $name, string $table, array $columns)
     {
         $command = (new CreateIndexCommand($name, $table, $columns))->getCommand();
-        $this->sql['createIndex'] = (new CreateIndexCommandTranslator($command))->make();
+        $this->sql['createIndex'] = (new CommandTranslator($command))->createIndexCommandTranslator();
     }
 
     public function dropIndex(string $name, string $table)
     {
         $command = (new DropIndexCommand($name, $table))->getCommand();
-        $this->sql['dropIndex'] = (new DropIndexCommandTranslator($command))->make();
+        $this->sql['dropIndex'] = (new CommandTranslator($command))->dropIndexCommandTranslator();
     }
 
     public function alterTable()

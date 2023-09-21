@@ -22,4 +22,6 @@ interface ColumnTranslatorInterface
     public function matchAttribute();
 
     public function matchForeignKey();
+
+    public function matchAfter();
 }

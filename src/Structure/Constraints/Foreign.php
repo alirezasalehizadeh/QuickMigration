@@ -1,6 +1,6 @@
 <?php
 
-namespace Alirezasalehizadeh\QuickMigration\Structure;
+namespace Alirezasalehizadeh\QuickMigration\Structure\Constraints;
 
 use Alirezasalehizadeh\QuickMigration\Enums\Foreign as EnumsForeign;
 use Alirezasalehizadeh\QuickMigration\Structure\Column;

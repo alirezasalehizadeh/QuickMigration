@@ -5,7 +5,7 @@ namespace Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\Transla
 use Alirezasalehizadeh\QuickMigration\Enums\Index;
 use Alirezasalehizadeh\QuickMigration\Enums\Type;
 use Alirezasalehizadeh\QuickMigration\Structure\Column;
-use Alirezasalehizadeh\QuickMigration\Structure\Foreign;
+use Alirezasalehizadeh\QuickMigration\Structure\Constraints\Foreign;
 use Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\ColumnTranslator;
 
 class MySqlTranslator extends ColumnTranslator
@@ -13,7 +13,7 @@ class MySqlTranslator extends ColumnTranslator
 
     protected $column;
 
-    protected $pattern = "`%s` %s %s %s %s %s %s";
+    protected $pattern = "`%s` %s %s %s %s %s %s %s";
 
     public function setColumn(Column $column)
     {
@@ -36,6 +36,7 @@ class MySqlTranslator extends ColumnTranslator
             $this->matchDefault(),
             $this->matchAutoIncrement(),
             $this->matchIndex(),
+            $this->matchAfter(),
         ));
     }
 
@@ -120,6 +121,11 @@ class MySqlTranslator extends ColumnTranslator
             $this->column->getOnUpdate() ? "ON UPDATE {$this->column->getOnUpdate()}" : null,
             $this->column->getOnDelete() ? "ON DELETE {$this->column->getOnDelete()}" : null,
         ));
+    }
+
+    public function matchAfter()
+    {
+        return $this->column->getAfter() ? "AFTER {$this->column->getAfter()}" : null;
     }
 
     private function trimString(string $string){

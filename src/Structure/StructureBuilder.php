@@ -4,6 +4,7 @@ namespace Alirezasalehizadeh\QuickMigration\Structure;
 
 use Alirezasalehizadeh\QuickMigration\Enums\Type;
 use Alirezasalehizadeh\QuickMigration\Structure\Column;
+use Alirezasalehizadeh\QuickMigration\Structure\Constraints\Foreign;
 
 class StructureBuilder
 {
@@ -40,6 +41,12 @@ class StructureBuilder
     public function timestamp(string $name)
     {
         return $this->columns[] = new Column($name, Type::Timestamp);
+    }
+
+    public function timestamps()
+    {
+        $this->columns[] = (new Column('created_at', Type::Timestamp))->nullable();
+        $this->columns[] = (new Column('updated_at', Type::Timestamp))->nullable();
     }
 
     public function json(string $name)

@@ -12,7 +12,7 @@ class PostgreSqlTranslator extends ColumnTranslator
 
     protected $column;
 
-    protected $pattern = "`%s` %s %s %s %s %s %s";
+    protected $pattern = "`%s` %s %s %s %s %s %s %s";
 
     public function setColumn(Column $column)
     {
@@ -31,6 +31,7 @@ class PostgreSqlTranslator extends ColumnTranslator
             $this->matchDefault(),
             $this->matchAutoIncrement(),
             $this->matchIndex(),
+            $this->matchAfter(),
         )));
     }
 
@@ -103,5 +104,10 @@ class PostgreSqlTranslator extends ColumnTranslator
         }
 
         return $result;
+    }
+
+    public function matchAfter()
+    {
+        return $this->column->getAfter() ? "AFTER {$this->column->getAfter()}" : null;
     }
 }

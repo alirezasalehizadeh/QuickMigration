@@ -4,7 +4,7 @@ namespace Alirezasalehizadeh\QuickMigration\Test\Structure;
 
 use Alirezasalehizadeh\QuickMigration\Enums\Type;
 use Alirezasalehizadeh\QuickMigration\Structure\Column;
-use Alirezasalehizadeh\QuickMigration\Structure\Foreign;
+use Alirezasalehizadeh\QuickMigration\Structure\Constraints\Foreign;
 use PHPUnit\Framework\TestCase;
 use Alirezasalehizadeh\QuickMigration\Structure\Structure;
 use Alirezasalehizadeh\QuickMigration\Structure\TableAlter;

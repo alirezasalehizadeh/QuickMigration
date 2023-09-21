@@ -12,14 +12,7 @@ use Alirezasalehizadeh\QuickMigration\Command\Commands\DropTableCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\ModifyColumnCommand;
 use Alirezasalehizadeh\QuickMigration\Enums\Type;
 use Alirezasalehizadeh\QuickMigration\Structure\Column;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\AddColumnCommandTranslator;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\CreateIndexCommandTranslator;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\CreateTableCommandTranslator;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropColumnCommandTranslator;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropIfExistsTableCommandTranslator;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropIndexCommandTranslator;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\DropTableCommandTranslator;
-use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\Translators\ModifyColumnCommandTranslator;
+use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\CommandTranslator;
 use PHPUnit\Framework\TestCase;
 
 class CommandTranslatorTest extends TestCase
@@ -35,7 +28,7 @@ class CommandTranslatorTest extends TestCase
             '`id` INT NOT NULL'
         ]))->getCommand();
 
-        $sql = (new CreateTableCommandTranslator($command))->make();
+        $sql = (new CommandTranslator($command))->createTableCommandTranslator();
 
         $this->assertSame("CREATE TABLE `foo`.`bar` (`id` INT NOT NULL)", $sql);
     }
@@ -45,7 +38,7 @@ class CommandTranslatorTest extends TestCase
     {
         $command = (new DropTableCommand($this->database, $this->table))->getCommand();
 
-        $sql = (new DropTableCommandTranslator($command))->make();
+        $sql = (new CommandTranslator($command))->dropTableCommandTranslator();
 
         $this->assertSame("DROP TABLE `foo`.`bar`", $sql);
     }
@@ -55,7 +48,7 @@ class CommandTranslatorTest extends TestCase
     {
         $command = (new DropIfExistsTableCommand($this->database, $this->table))->getCommand();
 
-        $sql = (new DropIfExistsTableCommandTranslator($command))->make();
+        $sql = (new CommandTranslator($command))->dropIfExistsTableCommandTranslator();
 
         $this->assertSame("DROP TABLE IF EXISTS `foo`.`bar`", $sql);
     }
@@ -65,7 +58,7 @@ class CommandTranslatorTest extends TestCase
     {
         $command = (new CreateIndexCommand('foo_baz_index', $this->table, ['foo', 'baz']))->getCommand();
 
-        $sql = (new CreateIndexCommandTranslator($command))->make();
+        $sql = (new CommandTranslator($command))->createIndexCommandTranslator();
 
         $this->assertSame("CREATE INDEX foo_baz_index ON bar(foo,baz)", $sql);
     }
@@ -75,7 +68,7 @@ class CommandTranslatorTest extends TestCase
     {
         $command = (new DropIndexCommand('foo_baz_index', $this->table))->getCommand();
 
-        $sql = (new DropIndexCommandTranslator($command))->make();
+        $sql = (new CommandTranslator($command))->dropIndexCommandTranslator();
 
         $this->assertSame("ALTER TABLE bar DROP INDEX foo_baz_index", $sql);
     }
@@ -85,7 +78,7 @@ class CommandTranslatorTest extends TestCase
     {
         $command = (new DropColumnCommand($this->table, 'baz'))->getCommand();
 
-        $sql = (new DropColumnCommandTranslator($command))->make();
+        $sql = (new CommandTranslator($command))->dropColumnCommandTranslator();
 
         $this->assertSame("ALTER TABLE `bar` DROP COLUMN baz", $sql);
     }
@@ -97,9 +90,9 @@ class CommandTranslatorTest extends TestCase
 
         $command = (new AddColumnCommand($this->table, $column))->getCommand();
 
-        $sql = (new AddColumnCommandTranslator($command))->make();
+        $sql = (new CommandTranslator($command))->addColumnCommandTranslator();
 
-        $this->assertSame("ALTER TABLE `bar` ADD baz VARCHAR", $sql);
+        $this->assertSame("ALTER TABLE `bar` ADD `baz` VARCHAR(255) NOT NULL", $sql);
     }
 
     /** @test */
@@ -109,8 +102,8 @@ class CommandTranslatorTest extends TestCase
 
         $command = (new ModifyColumnCommand($this->table, $column))->getCommand();
 
-        $sql = (new ModifyColumnCommandTranslator($command))->make();
+        $sql = (new CommandTranslator($command))->modifyColumnCommandTranslator();
 
-        $this->assertSame("ALTER TABLE `bar` MODIFY COLUMN baz TEXT", $sql);
+        $this->assertSame("ALTER TABLE `bar` MODIFY COLUMN `baz` TEXT NOT NULL", $sql);
     }
 }
