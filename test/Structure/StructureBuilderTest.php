@@ -140,9 +140,10 @@ class StructureBuilderTest extends TestCase
 
         $columns = $structure->done()['columns'];
 
-        $sql = (new ColumnTranslateManager())->translate($columns);
+        [$foo, $bar] = (new ColumnTranslateManager())->translate($columns);
 
-        $this->assertSame("`foo` INT NULL , `bar` INT NULL", "{$sql[0]} , {$sql[1]}");
+        $this->assertSame("`foo` INT NULL", $foo);
+        $this->assertSame("`bar` INT NULL", $bar);
     }
 
     /** @test */
@@ -155,9 +156,10 @@ class StructureBuilderTest extends TestCase
 
         $columns = $structure->done()['columns'];
 
-        $sql = (new ColumnTranslateManager())->translate($columns);
+        [$foo, $bar] = (new ColumnTranslateManager())->translate($columns);
 
-        $this->assertSame("`foo` INT NULL , `bar` VARCHAR(100) NOT NULL UNIQUE", "{$sql[0]} , {$sql[1]}");
+        $this->assertSame("`foo` INT NULL", $foo);
+        $this->assertSame("`bar` VARCHAR(100) NOT NULL UNIQUE", $bar);
     }
 
     /** @test */
@@ -170,9 +172,10 @@ class StructureBuilderTest extends TestCase
 
         $columns = $structure->done()['columns'];
 
-        $sql = (new ColumnTranslateManager())->translate($columns);
+        [$foo, $bar] = (new ColumnTranslateManager())->translate($columns);
 
-        $this->assertSame("`foo` BOOLEAN NOT NULL DEFAULT('1') , `bar` DOUBLE NULL", "{$sql[0]} , {$sql[1]}");
+        $this->assertSame("`foo` BOOLEAN NOT NULL DEFAULT('1')", $foo);
+        $this->assertSame("`bar` DOUBLE NULL", $bar);
     }
 
     /** @test */
@@ -199,9 +202,10 @@ class StructureBuilderTest extends TestCase
         
         $columns = $structure->done()['columns'];
 
-        $sql = (new ColumnTranslateManager("MySql"))->translate($columns);
+        [$id, $foreignBarId] = (new ColumnTranslateManager("MySql"))->translate($columns);
 
-        $this->assertSame("`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, FOREIGN KEY (bar_id) REFERENCES `bar`(id) ON UPDATE CASCADE", "{$sql[0]}, {$sql[1]}");
+        $this->assertSame("`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY", $id);
+        $this->assertSame("FOREIGN KEY (bar_id) REFERENCES `bar`(id) ON UPDATE CASCADE", $foreignBarId);
     }
 
     /** @test */
@@ -216,11 +220,12 @@ class StructureBuilderTest extends TestCase
         $postStructure->foreign('user_id')->reference('id')->on('users')->cascadeOnDelete();
         $postsColumn = $postStructure->done()['columns'];
 
-        $userSql = (new ColumnTranslateManager("MySql"))->translate($usersColumn)[0];
-        $postSql = (new ColumnTranslateManager("MySql"))->translate($postsColumn);
+        $userId = (new ColumnTranslateManager("MySql"))->translate($usersColumn)[0];
+        [$postUserId, $foreignUserId] = (new ColumnTranslateManager("MySql"))->translate($postsColumn);
 
-        $this->assertSame("`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY", $userSql);
-        $this->assertSame("`user_id` INT NOT NULL, FOREIGN KEY (user_id) REFERENCES `users`(id) ON DELETE CASCADE", "{$postSql[0]}, {$postSql[1]}");
+        $this->assertSame("`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY", $userId);
+        $this->assertSame("`user_id` INT NOT NULL", $postUserId);
+        $this->assertSame("FOREIGN KEY (user_id) REFERENCES `users`(id) ON DELETE CASCADE", $foreignUserId);
     }
 
     /** @test */
@@ -233,6 +238,24 @@ class StructureBuilderTest extends TestCase
         $sql = (new ColumnTranslateManager())->translate([$column])[0];
 
         $this->assertSame("`foo` VARCHAR(255) NOT NULL UNIQUE , INDEX(foo)", $sql);
+    }
+
+    /** @test */
+    public function createColumnAfterSpecificColumnTest()
+    {
+        $structure = new StructureBuilder('test');
+
+        $structure->string('foo')->nullable();
+        $structure->string('bar');
+        $structure->number('baz')->after('foo');
+
+        $columns = $structure->done()['columns'];
+
+        [$foo, $bar, $baz] = (new ColumnTranslateManager())->translate($columns);
+
+        $this->assertSame("`foo` VARCHAR(255) NULL", $foo);
+        $this->assertSame("`bar` VARCHAR(255) NOT NULL", $bar);
+        $this->assertSame("`baz` INT NOT NULL AFTER foo", $baz);
     }
 
     /** @test */
