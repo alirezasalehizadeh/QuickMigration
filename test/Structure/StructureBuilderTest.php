@@ -83,6 +83,21 @@ class StructureBuilderTest extends TestCase
     }
 
     /** @test */
+    public function createTimestampColumnsTest()
+    {
+        $structure = new StructureBuilder('test');
+
+        $structure->timestamps();
+
+        $columns = $structure->done()['columns'];
+
+        [$createdAt, $updatedAt] = (new ColumnTranslateManager())->translate($columns);
+
+        $this->assertSame("`created_at` TIMESTAMP NULL", $createdAt);
+        $this->assertSame("`updated_at` TIMESTAMP NULL", $updatedAt);
+    }
+
+    /** @test */
     public function createJsonTypeColumnTest()
     {
         $structure = new StructureBuilder('test');
