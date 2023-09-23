@@ -77,11 +77,12 @@ $structure->string(string $name, int $length);
 $structure->number(string $name);
 $structure->text(string $name);
 $structure->timestamp(string $name);
+$structure->timestamps();
 $structure->json(string $name);
 $structure->enum(string $name, array $enums);
-$structure->foreign(string $column)->reference(string $column)->on(string $table)->cascadeOnDelete()->cascadeOnUpdate();
+$structure->foreign(string $column)->reference(string $column)->on(string $table);
 ```
-*NOTE: See the [Structure Test](https://github.com/alirezasalehizadeh/QuickMigration/blob/1.6.x/test/Structure/StructureBuilderTest.php) file for examples
+*NOTE: See the [Structure Test](https://github.com/alirezasalehizadeh/QuickMigration/blob/1.7.x/test/Structure/StructureBuilderTest.php) file for examples
 #### Column attributes:
 ```php
 $structure->number('test')
@@ -92,6 +93,7 @@ $structure->number('test')
 ->autoIncrement()           // Set this auto increment
 ->index()                   // Index this column
 ->unsigned()                // Set unsigned attribute
+->after('column')           // Set this column after specific column
 ```
 #### Custom Column:
 Sometimes it happens that you need a specific type of column that is not available in `Type` enum and you have to create it manually. `QuickMigration` has provided you with a quick and easy way to create a specific type of column!
@@ -112,8 +114,9 @@ dropIfExists(string $table);
 drop(string $table);
 createIndex(string $name, string $table, array $columns);    // It is used to index several columns together
 dropIndex(string $name, string $table);
+alterTable();
 ```
-*NOTE: See the [Command Test](https://github.com/alirezasalehizadeh/QuickMigration/blob/1.6.x/test/Command/CommandTranslator/CommandTranslatorTest.php) file for examples
+*NOTE: See the [Command Test](https://github.com/alirezasalehizadeh/QuickMigration/blob/1.7.x/test/Command/CommandTranslator/CommandTranslatorTest.php) file for examples
 
 #### Get SQL:
 You can get the sql`s by call the migration class object as string:
@@ -140,6 +143,43 @@ $structure->foreign('bar_id')->reference('id')->on('bar');
 $structure->foreignBarId()->reference('id')->on('bar');
 // ...
 ```
+
+### Modify Table:
+Now, for modify your tables can use `change` method on `Structure`:
+``` php
+
+use Alirezasalehizadeh\QuickMigration\Migration;
+use Alirezasalehizadeh\QuickMigration\Structure\Structure;
+use Alirezasalehizadeh\QuickMigration\Structure\TableAlter;
+
+class xMigration extends Migration
+{
+
+    protected $database = "database name";
+
+    protected $translator = "set database translator name from available translators array (default MySql)";
+
+    public function set(): array
+    {
+        return Structure::change('table_name', function (TableAlter $alter) {
+            // Write your commands for modify table...
+        });
+    }
+
+}
+```
+#### Run commands:
+```php
+// index.php
+
+$connection = PDO connection object;
+
+(new xMigration($connection))->alterTable();
+```
+```
+php index.php
+```
+*NOTE: See the [Table Alter Test](https://github.com/alirezasalehizadeh/QuickMigration/blob/1.7.x/test/Structure/StructureAlterTest.php) file for examples
 
 
 
