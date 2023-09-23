@@ -235,8 +235,7 @@ class StructureBuilderTest extends TestCase
         $postStructure->foreign('user_id')->reference('id')->on('users')->cascadeOnDelete();
         $postsColumn = $postStructure->done()['columns'];
 
-        $userId = (new ColumnTranslateManager("MySql"))->translate($usersColumn)[0];
-        [$postUserId, $foreignUserId] = (new ColumnTranslateManager("MySql"))->translate($postsColumn);
+        [$userId, $postUserId, $foreignUserId] = (new ColumnTranslateManager("MySql"))->translate(array_merge($usersColumn, $postsColumn));
 
         $this->assertSame("`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY", $userId);
         $this->assertSame("`user_id` INT NOT NULL", $postUserId);

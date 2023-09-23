@@ -22,11 +22,11 @@ class StructureAlterTest extends TestCase
             $alter->dropColumn('foo');
         });
 
-        $sql = (new TableAlterTranslationManager($commands))->translate();
+        [$addColumn, $addConstraint, $modifyColumn, $dropColumn] = (new TableAlterTranslationManager($commands))->translate();
 
-        $this->assertSame("ALTER TABLE `test` ADD `foo` VARCHAR(255) NOT NULL", $sql[0]);
-        $this->assertSame("ALTER TABLE `test` ADD CONSTRAINT FOREIGN KEY (foo) REFERENCES `bar`(id) ON UPDATE RESTRICT ON DELETE CASCADE", $sql[1]);
-        $this->assertSame("ALTER TABLE `test` MODIFY COLUMN `foo` TEXT NOT NULL", $sql[2]);
-        $this->assertSame("ALTER TABLE `test` DROP COLUMN foo", $sql[3]);
+        $this->assertSame("ALTER TABLE `test` ADD `foo` VARCHAR(255) NOT NULL", $addColumn);
+        $this->assertSame("ALTER TABLE `test` ADD CONSTRAINT FOREIGN KEY (foo) REFERENCES `bar`(id) ON UPDATE RESTRICT ON DELETE CASCADE", $addConstraint);
+        $this->assertSame("ALTER TABLE `test` MODIFY COLUMN `foo` TEXT NOT NULL", $modifyColumn);
+        $this->assertSame("ALTER TABLE `test` DROP COLUMN foo", $dropColumn);
     }
 }
