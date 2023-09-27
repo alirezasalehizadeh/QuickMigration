@@ -20,9 +20,9 @@ class Column
 
     public function getType()
     {
-        return strtoupper($this->type instanceof Type
+        return $this->type instanceof Type
             ? $this->type->value
-            : $this->type);
+            : strtoupper($this->type);
     }
 
     public function getValue()
