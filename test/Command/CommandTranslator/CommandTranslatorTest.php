@@ -11,7 +11,7 @@ use Alirezasalehizadeh\QuickMigration\Command\Commands\DropIndexCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\DropTableCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\ModifyColumnCommand;
 use Alirezasalehizadeh\QuickMigration\Enums\Type;
-use Alirezasalehizadeh\QuickMigration\Structure\Column;
+use Alirezasalehizadeh\QuickMigration\Structure\ColumnFactory;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\CommandTranslator;
 use PHPUnit\Framework\TestCase;
 
@@ -86,7 +86,7 @@ class CommandTranslatorTest extends TestCase
     /** @test */
     public function canMakeAddColumnCommandTest()
     {
-        $column = new Column('baz', Type::Varchar);
+        $column = ColumnFactory::create('baz', Type::Varchar);
 
         $command = (new AddColumnCommand($this->table, $column))->getCommand();
 
@@ -98,7 +98,7 @@ class CommandTranslatorTest extends TestCase
     /** @test */
     public function canMakeModifyColumnCommandTest()
     {
-        $column = new Column('baz', Type::Text);
+        $column = ColumnFactory::create('baz', Type::Text);
 
         $command = (new ModifyColumnCommand($this->table, $column))->getCommand();
 

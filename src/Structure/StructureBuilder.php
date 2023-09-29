@@ -3,8 +3,7 @@
 namespace Alirezasalehizadeh\QuickMigration\Structure;
 
 use Alirezasalehizadeh\QuickMigration\Enums\Type;
-use Alirezasalehizadeh\QuickMigration\Structure\Column;
-use Alirezasalehizadeh\QuickMigration\Structure\Constraints\Foreign;
+use Alirezasalehizadeh\QuickMigration\Structure\ColumnFactory;
 
 class StructureBuilder
 {
@@ -25,43 +24,43 @@ class StructureBuilder
 
     public function string(string $name, int $length = 255)
     {
-        return $this->columns[] = new Column($name, Type::Varchar, $length);
+        return $this->columns[] = ColumnFactory::create($name, Type::Varchar, $length);
     }
 
     public function number(string $name)
-    {
-        return $this->columns[] = new Column($name, Type::Int);
+    {   
+        return $this->columns[] = ColumnFactory::create($name, Type::Int);
     }
 
     public function text(string $name)
     {
-        return $this->columns[] = new Column($name, Type::Text);
+        return $this->columns[] = ColumnFactory::create($name, Type::Text);
     }
 
     public function timestamp(string $name)
     {
-        return $this->columns[] = new Column($name, Type::Timestamp);
+        return $this->columns[] = ColumnFactory::create($name, Type::Timestamp);
     }
 
     public function timestamps()
     {
-        $this->columns[] = (new Column('created_at', Type::Timestamp))->nullable();
-        $this->columns[] = (new Column('updated_at', Type::Timestamp))->nullable();
+        $this->columns[] = ColumnFactory::create('created_at', Type::Timestamp)->nullable();
+        $this->columns[] = ColumnFactory::create('updated_at', Type::Timestamp)->nullable();
     }
 
     public function json(string $name)
     {
-        return $this->columns[] = new Column($name, Type::Json);
+        return $this->columns[] = ColumnFactory::create($name, Type::Json);
     }
 
     public function enum(string $name, array $enums)
     {
-        return $this->columns[] = new Column($name, Type::Enum, $enums);
+        return $this->columns[] = ColumnFactory::create($name, Type::Enum, $enums);
     }
 
     public function foreign(string $column)
     {
-        return $this->columns[] = new Foreign($column, '');
+        return $this->columns[] = ColumnFactory::foreign($column, '');
     }
 
     public function done()
@@ -83,6 +82,6 @@ class StructureBuilder
             return $this->foreign($column);
         }
 
-        return $this->columns[] = new Column($arguments[0], $name);
+        return $this->columns[] = ColumnFactory::create($arguments[0], $name);
     }
 }
