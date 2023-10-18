@@ -12,9 +12,12 @@ use Alirezasalehizadeh\QuickMigration\Command\Commands\DropIfExistsTableCommand;
 use Alirezasalehizadeh\QuickMigration\Translation\ColumnTranslator\ColumnTranslateManager;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\CommandTranslator;
 use Alirezasalehizadeh\QuickMigration\Translation\CommandTranslator\TableAlterTranslationManager;
+use Alirezasalehizadeh\QuickMigration\Utils\Exportable;
 
 abstract class Migration implements MigrationInterface
 {
+    use Exportable;
+
     protected $database;
 
     protected $translator;
@@ -23,7 +26,7 @@ abstract class Migration implements MigrationInterface
 
     private $sql = [];
 
-    private $displayQuery = false;
+    private $autoRun = true;
 
     public function __construct(PDO $connection)
     {
@@ -39,14 +42,12 @@ abstract class Migration implements MigrationInterface
     {
         $command = (new DropTableCommand($this->database, $table))->getCommand();
         $this->sql['drop'] = (new CommandTranslator($command))->dropTableCommandTranslator();
-        $this->run($this->sql['drop']);
     }
 
     public function dropIfExists(string $table)
     {
         $command = (new DropIfExistsTableCommand($this->database, $table))->getCommand();
         $this->sql['dropIfExists'] = (new CommandTranslator($command))->dropIfExistsTableCommandTranslator();
-        $this->run($this->sql['dropIfExists']);
     }
 
     public function migrate()
@@ -79,7 +80,7 @@ abstract class Migration implements MigrationInterface
     {
         $alterCommands = $this->set();
         $translatedCommands =  (new TableAlterTranslationManager($alterCommands))->translate();
-        foreach($translatedCommands as $command){
+        foreach ($translatedCommands as $command) {
             $this->sql[] = $command;
         }
     }
@@ -91,16 +92,22 @@ abstract class Migration implements MigrationInterface
 
     public function __toString()
     {
-        $this->displayQuery = true;
+        $this->setAutoRun(false);
         return implode("\n", $this->sql);
     }
 
     public function __destruct()
     {
-        if($this->displayQuery === false){
+        if ($this->autoRun) {
             foreach ($this->sql as $sql) {
                 $this->run($sql);
             }
         }
+    }
+
+    public function setAutoRun(bool $autoRun = true)
+    {
+        $this->autoRun = $autoRun;
+        return $this;
     }
 }
