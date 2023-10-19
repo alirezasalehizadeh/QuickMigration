@@ -4,6 +4,7 @@ namespace Alirezasalehizadeh\QuickMigration\Structure;
 
 use Alirezasalehizadeh\QuickMigration\Command\Commands\AddColumnCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\AddConstraintCommand;
+use Alirezasalehizadeh\QuickMigration\Command\Commands\DropCheckConstraintCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\DropColumnCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\ModifyColumnCommand;
 
@@ -34,6 +35,11 @@ class TableAlter
     public function addConstraint(Column $column)
     {
         return $this->commands[] = (new AddConstraintCommand($this->table, $column))->getCommand();
+    }
+
+    public function dropCheck(string $name)
+    {
+        return $this->commands[] = (new DropCheckConstraintCommand($this->table, $name))->getCommand();
     }
 
     public function done()

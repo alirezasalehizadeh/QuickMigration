@@ -13,7 +13,7 @@ class MySqlTranslator extends ColumnTranslator
 
     protected $column;
 
-    protected $pattern = "`%s` %s %s %s %s %s %s %s";
+    protected $pattern = "`%s` %s %s %s %s %s %s %s %s %s";
 
     public function setColumn(Column $column)
     {
@@ -37,6 +37,8 @@ class MySqlTranslator extends ColumnTranslator
             $this->matchAutoIncrement(),
             $this->matchIndex(),
             $this->matchAfter(),
+            $this->matchCheck(),
+            $this->matchComment(),
         ));
     }
 
@@ -59,6 +61,11 @@ class MySqlTranslator extends ColumnTranslator
         }
 
         if ($type === Type::Enum->value) {
+            $values = implode("','", $this->column->getValue());
+            $type .= "('{$values}')";
+        }
+
+        if ($type === Type::Set->value) {
             $values = implode("','", $this->column->getValue());
             $type .= "('{$values}')";
         }
@@ -126,6 +133,16 @@ class MySqlTranslator extends ColumnTranslator
     public function matchAfter()
     {
         return $this->column->getAfter() ? "AFTER {$this->column->getAfter()}" : null;
+    }
+
+    public function matchCheck()
+    {
+        return $this->column->getCheck() ? "CHECK ({$this->column->getCheck()})" : null;
+    }
+
+    public function matchComment()
+    {
+        return $this->column->getComment() ? "COMMENT '{$this->column->getComment()}'" : null;
     }
 
     private function trimString(string $string){

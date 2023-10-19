@@ -54,4 +54,12 @@ class ColumnTranslator implements ColumnTranslatorInterface
     public function matchAfter()
     {
     }
+
+    public function matchCheck()
+    {
+    }
+
+    public function matchComment()
+    {
+    }
 }

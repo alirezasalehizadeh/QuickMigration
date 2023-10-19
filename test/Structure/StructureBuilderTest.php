@@ -273,6 +273,54 @@ class StructureBuilderTest extends TestCase
     }
 
     /** @test */
+    public function createArrayColumnTest()
+    {
+        $structure = new StructureBuilder('test');
+
+        $structure->array('foo', ['a', 'b', 'c']);
+        $structure->string('bar');
+
+        $columns = $structure->done()['columns'];
+
+        [$foo, $bar] = (new ColumnTranslateManager())->translate($columns);
+
+        $this->assertSame("`foo` SET('a','b','c') NOT NULL", $foo);
+        $this->assertSame("`bar` VARCHAR(255) NOT NULL", $bar);
+    }
+
+    /** @test */
+    public function createColumnWithCommentTest()
+    {
+        $structure = new StructureBuilder('test');
+
+        $structure->string('foo')->nullable()->comment('this is foo.');
+        $structure->string('bar')->comment('this is bar.');
+
+        $columns = $structure->done()['columns'];
+
+        [$foo, $bar] = (new ColumnTranslateManager())->translate($columns);
+
+        $this->assertSame("`foo` VARCHAR(255) NULL COMMENT 'this is foo.'", $foo);
+        $this->assertSame("`bar` VARCHAR(255) NOT NULL COMMENT 'this is bar.'", $bar);
+    }
+
+    /** @test */
+    public function createColumnWithCheckTest()
+    {
+        $structure = new StructureBuilder('test');
+
+        $structure->string('foo')->nullable();
+        $structure->number('bar')->check('bar >= 0');
+
+        $columns = $structure->done()['columns'];
+
+        [$foo, $bar] = (new ColumnTranslateManager())->translate($columns);
+
+        $this->assertSame("`foo` VARCHAR(255) NULL", $foo);
+        $this->assertSame("`bar` INT NOT NULL CHECK (bar >= 0)", $bar);
+    }
+
+    /** @test */
     public function createStructureTest()
     {
         $structure = Structure::create('test', function (StructureBuilder $builder) {

@@ -3,8 +3,10 @@
 namespace Alirezasalehizadeh\QuickMigration\Test\Command\CommandTranslator;
 
 use Alirezasalehizadeh\QuickMigration\Command\Commands\AddColumnCommand;
+use Alirezasalehizadeh\QuickMigration\Command\Commands\AddConstraintCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\CreateIndexCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\CreateTableCommand;
+use Alirezasalehizadeh\QuickMigration\Command\Commands\DropCheckConstraintCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\DropColumnCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\DropIfExistsTableCommand;
 use Alirezasalehizadeh\QuickMigration\Command\Commands\DropIndexCommand;
@@ -105,5 +107,27 @@ class CommandTranslatorTest extends TestCase
         $sql = (new CommandTranslator($command))->modifyColumnCommandTranslator();
 
         $this->assertSame("ALTER TABLE `bar` MODIFY COLUMN `baz` TEXT NOT NULL", $sql);
+    }
+
+    /** @test */
+    public function canAddMultipleCheckConstraintTest()
+    {
+        $column = ColumnFactory::create('baz', '')->check("Age>=18 AND City='Sari'");
+
+        $command = (new ModifyColumnCommand($this->table, $column))->getCommand();
+
+        $sql = (new CommandTranslator($command))->modifyColumnCommandTranslator();
+
+        $this->assertSame("ALTER TABLE `bar` MODIFY COLUMN `baz` NOT NULL CHECK (Age>=18 AND City='Sari')", $sql);
+    }
+
+    /** @test */
+    public function canDropCheckConstraintTest()
+    {
+        $command = (new DropCheckConstraintCommand($this->table, 'bar'))->getCommand();
+
+        $sql = (new CommandTranslator($command))->dropCheckConstraintCommandTranslator();
+
+        $this->assertSame("ALTER TABLE `bar` DROP CHECK bar", $sql);
     }
 }

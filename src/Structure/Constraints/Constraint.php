@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Alirezasalehizadeh\QuickMigration\Structure\Constraints;
 
 use Alirezasalehizadeh\QuickMigration\Enums\Attribute;
@@ -20,6 +19,10 @@ trait Constraint
     private $autoIncrement;
 
     private $after;
+
+    private $comment;
+
+    private $check;
 
     public function nullable(bool $nullable = true)
     {
@@ -77,6 +80,18 @@ trait Constraint
         return $this;
     }
 
+    public function comment(string $comment)
+    {
+        $this->comment = $comment;
+        return $this;
+    }
+
+    public function check(string $expression)
+    {
+        $this->check = $expression;
+        return $this;
+    }
+
     public function getIndex()
     {
         return $this->index;
@@ -105,5 +120,15 @@ trait Constraint
     public function getAfter()
     {
         return $this->after;
+    }
+
+    public function getCheck()
+    {
+        return $this->check;
+    }
+
+    public function getComment()
+    {
+        return $this->comment;
     }
 }

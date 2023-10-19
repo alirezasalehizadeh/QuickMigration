@@ -105,4 +105,14 @@ class CommandTranslator
             (new ColumnTranslateManager)->translate([$this->command->getIncludes()['column']])[0],
         );
     }
+
+    public function dropCheckConstraintCommandTranslator()
+    {
+        return sprintf(
+            $this->command->getPattern(),
+            $this->command->getName(),
+            $this->command->getIncludes()['table'],
+            $this->command->getIncludes()['name'],
+        );
+    }
 }

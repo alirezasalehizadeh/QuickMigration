@@ -24,4 +24,8 @@ interface ColumnTranslatorInterface
     public function matchForeignKey();
 
     public function matchAfter();
+
+    public function matchCheck();
+
+    public function matchComment();
 }

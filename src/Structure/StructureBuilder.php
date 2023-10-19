@@ -61,6 +61,11 @@ class StructureBuilder
         return $this->columns[] = ColumnFactory::create($name, Type::Enum, $enums);
     }
 
+    public function array(string $name, array $values)
+    {
+        return $this->columns[] = ColumnFactory::create($name, Type::Set, $values);
+    }
+
     public function foreign(string $column)
     {
         return $this->columns[] = ColumnFactory::foreign($column, '');

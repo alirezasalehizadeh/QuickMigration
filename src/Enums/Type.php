@@ -10,4 +10,5 @@ enum Type: string
     case Timestamp = "TIMESTAMP";
     case Json = "JSON";
     case Enum = "ENUM";
+    case Set = "SET";
 }
