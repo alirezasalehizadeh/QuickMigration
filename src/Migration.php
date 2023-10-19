@@ -66,13 +66,13 @@ abstract class Migration implements MigrationInterface
 
     public function createIndex(string $name, string $table, array $columns)
     {
-        $command = (new CreateIndexCommand($name, $table, $columns))->getCommand();
+        $command = (new CreateIndexCommand($name, $this->database, $table, $columns))->getCommand();
         $this->sql['createIndex'] = (new CommandTranslator($command))->createIndexCommandTranslator();
     }
 
     public function dropIndex(string $name, string $table)
     {
-        $command = (new DropIndexCommand($name, $table))->getCommand();
+        $command = (new DropIndexCommand($name, $this->database, $table))->getCommand();
         $this->sql['dropIndex'] = (new CommandTranslator($command))->dropIndexCommandTranslator();
     }
 

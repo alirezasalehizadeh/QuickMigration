@@ -9,9 +9,9 @@ use Alirezasalehizadeh\QuickMigration\Enums\Command as EnumsCommand;
 class DropIndexCommand extends Command implements CommandInterface
 {
 
-    protected string $pattern = "%s %s DROP INDEX %s";
+    protected string $pattern = "%s %s.%s DROP INDEX %s";
 
-    public function __construct(private string $name, private string $table)
+    public function __construct(private string $name, private string $database, private string $table)
     {
     }
 

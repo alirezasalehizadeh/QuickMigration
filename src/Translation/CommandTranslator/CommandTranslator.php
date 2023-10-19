@@ -38,6 +38,7 @@ class CommandTranslator
             $this->command->getPattern(),
             $this->command->getName(),
             $this->command->getIncludes()['name'],
+            $this->command->getIncludes()['database'],
             $this->command->getIncludes()['table'],
             implode(",", $this->command->getIncludes()['columns']),
         );
@@ -48,6 +49,7 @@ class CommandTranslator
         return sprintf(
             $this->command->getPattern(),
             $this->command->getName(),
+            $this->command->getIncludes()['database'],
             $this->command->getIncludes()['table'],
             $this->command->getIncludes()['name'],
         );

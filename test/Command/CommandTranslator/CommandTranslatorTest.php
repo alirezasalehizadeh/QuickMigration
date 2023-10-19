@@ -56,21 +56,21 @@ class CommandTranslatorTest extends TestCase
     /** @test */
     public function canMakeCreateIndexCommandTest()
     {
-        $command = (new CreateIndexCommand('foo_baz_index', $this->table, ['foo', 'baz']))->getCommand();
+        $command = (new CreateIndexCommand('ban_baz_index', $this->database, $this->table, ['ban', 'baz']))->getCommand();
 
         $sql = (new CommandTranslator($command))->createIndexCommandTranslator();
 
-        $this->assertSame("CREATE INDEX foo_baz_index ON bar(foo,baz)", $sql);
+        $this->assertSame("CREATE INDEX ban_baz_index ON foo.bar(ban,baz)", $sql);
     }
 
     /** @test */
     public function canMakeDropIndexCommandTest()
     {
-        $command = (new DropIndexCommand('foo_baz_index', $this->table))->getCommand();
+        $command = (new DropIndexCommand('ban_baz_index', $this->database, $this->table))->getCommand();
 
         $sql = (new CommandTranslator($command))->dropIndexCommandTranslator();
 
-        $this->assertSame("ALTER TABLE bar DROP INDEX foo_baz_index", $sql);
+        $this->assertSame("ALTER TABLE foo.bar DROP INDEX ban_baz_index", $sql);
     }
 
     /** @test */

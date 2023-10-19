@@ -28,7 +28,7 @@ class StructureBuilder
     }
 
     public function number(string $name)
-    {   
+    {
         return $this->columns[] = ColumnFactory::create($name, Type::Int);
     }
 
@@ -44,8 +44,11 @@ class StructureBuilder
 
     public function timestamps()
     {
-        $this->columns[] = ColumnFactory::create('created_at', Type::Timestamp)->nullable();
-        $this->columns[] = ColumnFactory::create('updated_at', Type::Timestamp)->nullable();
+        array_push(
+            $this->columns,
+            ColumnFactory::create('created_at', Type::Timestamp)->nullable(),
+            ColumnFactory::create('updated_at', Type::Timestamp)->nullable()
+        );
     }
 
     public function json(string $name)

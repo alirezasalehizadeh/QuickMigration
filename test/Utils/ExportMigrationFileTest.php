@@ -22,7 +22,7 @@ class ExportMigrationFileTest extends TestCase
 
     protected function tearDown(): void
     {
-        if (file_exists($this->fileName . '.sql')) unlink($this->fileName . '.sql');
+        if (file_exists($file = $this->fileName . '.sql')) unlink($file);
     }
 
     /** @test */
