@@ -138,7 +138,7 @@ CREATE TABLE `foo`.`bar` (`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY K
 
 ```
 ##### Get SQL as File:
-You can use `export` method, for get your sql`s in a file, :
+You can use `export` method, for get your sql`s in a file:
 ```php
 $obj = new xMigration($connection);
 $obj->dropIfExists('bar');
