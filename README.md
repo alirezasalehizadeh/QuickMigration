@@ -72,7 +72,9 @@ php index.php
 
 #### Structure methods:
 ```php
-$structure->id();
+$structure->id(string $name);
+$structure->uuid(string $name, int $length);
+$structure->ulid(string $name, int $length);
 $structure->string(string $name, int $length);
 $structure->number(string $name);
 $structure->text(string $name);
@@ -80,6 +82,7 @@ $structure->timestamp(string $name);
 $structure->timestamps();
 $structure->json(string $name);
 $structure->enum(string $name, array $enums);
+$structure->array(string $name, array $values);
 $structure->foreign(string $column)->reference(string $column)->on(string $table);
 ```
 *NOTE: See the [Structure Test](https://github.com/alirezasalehizadeh/QuickMigration/blob/1.7.x/test/Structure/StructureBuilderTest.php) file for examples
@@ -94,6 +97,8 @@ $structure->number('test')
 ->index()                   // Index this column
 ->unsigned()                // Set unsigned attribute
 ->after('column')           // Set this column after specific column
+->check('test >= 0')        // Check a expression
+->comment('this is test column')  // Set a comment
 ```
 #### Custom Column:
 Sometimes it happens that you need a specific type of column that is not available in `Type` enum and you have to create it manually. `QuickMigration` has provided you with a quick and easy way to create a specific type of column!
@@ -130,6 +135,17 @@ echo $obj;
 DROP TABLE IF EXISTS `foo`.`bar`
 CREATE TABLE `foo`.`bar` (`id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, ...)
 **/
+
+```
+##### Get SQL as File:
+You can use `export` method, for get your sql`s in a file, :
+```php
+$obj = new xMigration($connection);
+$obj->dropIfExists('bar');
+$obj->migrate();
+$obj->export(string $fileName);
+
+// Create a file named fileName.sql
 
 ```
 
