@@ -124,10 +124,10 @@ class CommandTranslatorTest extends TestCase
     /** @test */
     public function canDropCheckConstraintTest()
     {
-        $command = (new DropCheckConstraintCommand($this->table, 'bar'))->getCommand();
+        $command = (new DropCheckConstraintCommand($this->table, 'baz'))->getCommand();
 
         $sql = (new CommandTranslator($command))->dropCheckConstraintCommandTranslator();
 
-        $this->assertSame("ALTER TABLE `bar` DROP CHECK bar", $sql);
+        $this->assertSame("ALTER TABLE `bar` DROP CHECK baz", $sql);
     }
 }
