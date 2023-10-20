@@ -14,66 +14,86 @@ class StructureBuilder
     {
     }
 
-    public function id()
+    public function id(string $name = 'id')
     {
-        $this->bigInt('id')
+        $this->bigInt($name)
             ->autoIncrement()
             ->primary()
             ->unsigned();
     }
 
+    public function uuid(string $name = 'uuid', int $length = 32)
+    {
+        return $this->string($name, $length)->primary();
+    }
+
+    public function ulid(string $name = 'ulid', int $length = 26)
+    {
+        return $this->string($name, $length)->primary();
+    }
+
     public function string(string $name, int $length = 255)
     {
-        return $this->columns[] = ColumnFactory::create($name, Type::Varchar, $length);
+        return $this->addColumn($name, Type::Varchar, $length);
     }
 
     public function number(string $name)
     {
-        return $this->columns[] = ColumnFactory::create($name, Type::Int);
+        return $this->addColumn($name, Type::Int);
     }
 
     public function text(string $name)
     {
-        return $this->columns[] = ColumnFactory::create($name, Type::Text);
+        return $this->addColumn($name, Type::Text);
     }
 
     public function timestamp(string $name)
     {
-        return $this->columns[] = ColumnFactory::create($name, Type::Timestamp);
+        return $this->addColumn($name, Type::Timestamp);
     }
 
     public function timestamps()
     {
         array_push(
             $this->columns,
-            ColumnFactory::create('created_at', Type::Timestamp)->nullable(),
-            ColumnFactory::create('updated_at', Type::Timestamp)->nullable()
+            $this->addColumn('created_at', Type::Timestamp)->nullable(),
+            $this->addColumn('updated_at', Type::Timestamp)->nullable()
         );
     }
 
     public function json(string $name)
     {
-        return $this->columns[] = ColumnFactory::create($name, Type::Json);
+        return $this->addColumn($name, Type::Json);
     }
 
     public function enum(string $name, array $enums)
     {
-        return $this->columns[] = ColumnFactory::create($name, Type::Enum, $enums);
+        return $this->addColumn($name, Type::Enum, $enums);
     }
 
     public function array(string $name, array $values)
     {
-        return $this->columns[] = ColumnFactory::create($name, Type::Set, $values);
+        return $this->addColumn($name, Type::Set, $values);
     }
 
     public function foreign(string $column)
     {
-        return $this->columns[] = ColumnFactory::foreign($column, '');
+        return $this->addForeignColumn($column, '');
     }
 
     public function done()
     {
         return ['columns' => $this->columns, 'table' => $this->table];
+    }
+
+    private function addColumn(string $name, Type|string $type, mixed $value = null)
+    {
+        return $this->columns[] = ColumnFactory::create($name, $type, $value);
+    }
+
+    private function addForeignColumn(string $name, Type|string $type, mixed $value = null)
+    {
+        return $this->columns[] = ColumnFactory::foreign($name, $type, $value);
     }
 
     public function __call($name, $arguments)
@@ -90,6 +110,6 @@ class StructureBuilder
             return $this->foreign($column);
         }
 
-        return $this->columns[] = ColumnFactory::create($arguments[0], $name);
+        return $this->addColumn($arguments[0], $name);
     }
 }
