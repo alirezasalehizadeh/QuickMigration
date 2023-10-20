@@ -37,8 +37,8 @@ class MySqlTranslator extends ColumnTranslator
             $this->matchAutoIncrement(),
             $this->matchIndex(),
             $this->matchAfter(),
-            $this->matchCheck(),
             $this->matchComment(),
+            $this->matchCheck(),
         ));
     }
 
