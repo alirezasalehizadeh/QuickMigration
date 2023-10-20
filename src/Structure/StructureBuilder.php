@@ -54,11 +54,8 @@ class StructureBuilder
 
     public function timestamps()
     {
-        array_push(
-            $this->columns,
-            $this->addColumn('created_at', Type::Timestamp)->nullable(),
-            $this->addColumn('updated_at', Type::Timestamp)->nullable()
-        );
+        $this->addColumn('created_at', Type::Timestamp)->nullable();
+        $this->addColumn('updated_at', Type::Timestamp)->nullable();
     }
 
     public function json(string $name)
