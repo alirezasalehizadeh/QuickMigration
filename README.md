@@ -120,6 +120,7 @@ drop(string $table);
 createIndex(string $name, string $table, array $columns);    // It is used to index several columns together
 dropIndex(string $name, string $table);
 alterTable();
+dropCheck(string $table, string $name);
 ```
 *NOTE: See the [Command Test](https://github.com/alirezasalehizadeh/QuickMigration/blob/1.7.x/test/Command/CommandTranslator/CommandTranslatorTest.php) file for examples
 
